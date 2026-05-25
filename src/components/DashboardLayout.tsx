@@ -15,35 +15,27 @@ const Icon = ({ d, className = '' }: { d: string; className?: string }) => (
 
 const ICONS = {
   dashboard: 'M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z',
-  kanban: 'M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4M9 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H9M9 3v18',
   calendar: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z',
-  contacts: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm7 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm4 8v-1a3 3 0 0 0-3-3',
-  projects: 'M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7zm9 5h6M12 12l-6 0m6 4H9',
-  reports: 'M9 19v-6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2zm0 0V9a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v10m-6 0a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2m0 0V5a2 2 0 0 1 2-2h2a2 2 0 0 0 2 2v14a2 2 0 0 0-2 2h-2a2 2 0 0 0-2-2z',
+  forms: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M16 13H8 M16 17H8 M10 9H8',
+  search: 'M21 21l-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0z',
   bell: 'M15 17H20L18.595 15.595A1 1 0 0 1 18.25 14.878V11C18.25 8.215 16.418 5.862 13.77 5.189A2 2 0 0 0 12 3C10.894 3 9.903 3.455 9.23 4.189C6.582 5.862 4.75 8.215 4.75 11V14.878A1 1 0 0 1 4.405 15.595L3 17H8M15 17A3 3 0 0 1 9 17M15 17H9',
   logout: 'M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1',
   chevronLeft: 'M15 19l-7-7 7-7',
   chevronRight: 'M9 18l6-6-6-6',
-  bread: 'M9 5C9 3.895 10.343 3 12 3s3 .895 3 2M5 8c0-1.657 3.134-3 7-3s7 1.343 7 3v2c0 1.657-3.134 3-7 3S5 11.657 5 10V8zm0 5v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6',
 };
 
 interface NavItem {
   id: string;
   label: string;
   icon: string;
-  permissionKey?: 'canViewKanban' | 'canViewContatos' | 'canViewProjetos' | 'canViewRelatorios' | 'canViewWeeklyAgenda';
+  permissionKey?: 'canViewWeeklyAgenda';
 }
 
-const NAV_MAIN: NavItem[] = [
+const NAV_ITEMS: NavItem[] = [
   { id: 'dashboard', label: 'Dashboard', icon: ICONS.dashboard },
-  { id: 'kanban', label: 'Kanban', icon: ICONS.kanban, permissionKey: 'canViewKanban' },
-  { id: 'agenda', label: 'Agenda', icon: ICONS.calendar, permissionKey: 'canViewWeeklyAgenda' },
-];
-
-const NAV_TOOLS: NavItem[] = [
-  { id: 'contatos', label: 'Contatos', icon: ICONS.contacts, permissionKey: 'canViewContatos' },
-  { id: 'projetos', label: 'Projetos', icon: ICONS.projects, permissionKey: 'canViewProjetos' },
-  { id: 'relatorios', label: 'Relatórios', icon: ICONS.reports, permissionKey: 'canViewRelatorios' },
+  { id: 'agenda', label: 'Agendas', icon: ICONS.calendar, permissionKey: 'canViewWeeklyAgenda' },
+  { id: 'forms', label: 'Google Forms', icon: ICONS.forms },
+  { id: 'analise', label: 'Análise', icon: ICONS.search },
 ];
 
 const ROLE_BADGE: Record<string, string> = {
@@ -143,20 +135,7 @@ function Sidebar({ activeItem, onNavigate, collapsed, onToggle }: {
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
-        {!collapsed && (
-          <p className="text-[9px] font-bold tracking-widest uppercase text-wine-600 px-3 pb-2">Menu Principal</p>
-        )}
-        {NAV_MAIN.filter(isVisible).map((item) => (
-          <NavButton key={item.id} item={item} active={activeItem === item.id}
-            collapsed={collapsed} onClick={() => onNavigate(item.id)} />
-        ))}
-
-        <div className={`my-3 border-t border-wine-800/40 ${collapsed ? 'mx-2' : 'mx-3'}`} />
-
-        {!collapsed && (
-          <p className="text-[9px] font-bold tracking-widest uppercase text-wine-600 px-3 pb-2">Ferramentas</p>
-        )}
-        {NAV_TOOLS.filter(isVisible).map((item) => (
+        {NAV_ITEMS.filter(isVisible).map((item) => (
           <NavButton key={item.id} item={item} active={activeItem === item.id}
             collapsed={collapsed} onClick={() => onNavigate(item.id)} />
         ))}
@@ -208,11 +187,9 @@ function Header({ activeItem, onAdd }: { activeItem: string; onAdd: () => void }
   if (!currentUser) return null;
   const labels: Record<string, string> = {
     dashboard: 'Dashboard',
-    kanban: 'Kanban',
-    agenda: 'Agenda da Semana',
-    contatos: 'Contatos',
-    projetos: 'Projetos',
-    relatorios: 'Relatórios',
+    agenda: 'Agendas',
+    forms: 'Google Forms',
+    analise: 'Análise de Desempenho',
   };
   const now = new Date();
   const dateStr = now.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' });
@@ -265,8 +242,15 @@ function Header({ activeItem, onAdd }: { activeItem: string; onAdd: () => void }
 // ============================================================
 // DashboardLayout — Layout raiz (sem faixa de dev no topo)
 // ============================================================
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const [activeItem, setActiveItem] = useState('dashboard');
+export default function DashboardLayout({
+  children,
+  activeItem,
+  onNavigate,
+}: {
+  children: React.ReactNode;
+  activeItem: string;
+  onNavigate: (id: string) => void;
+}) {
   const [collapsed, setCollapsed] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
 
@@ -276,7 +260,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <div className="relative shrink-0">
         <Sidebar
           activeItem={activeItem}
-          onNavigate={setActiveItem}
+          onNavigate={onNavigate}
           collapsed={collapsed}
           onToggle={() => setCollapsed(!collapsed)}
         />

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import { DashboardProvider } from './context/DashboardContext'
 import DashboardLayout from './components/DashboardLayout'
@@ -10,6 +11,7 @@ import './index.css'
 // ============================================================
 function AppRouter() {
   const { isAuthenticated, currentUser, hasPermission } = useAuth();
+  const [activeTab, setActiveTab] = useState('dashboard');
 
   if (!isAuthenticated || !currentUser) {
     return <LoginPage />;
@@ -19,8 +21,8 @@ function AppRouter() {
 
   return (
     <DashboardProvider userId={currentUser.id} isFullAccess={isFullAccess}>
-      <DashboardLayout>
-        <Dashboard />
+      <DashboardLayout activeItem={activeTab} onNavigate={setActiveTab}>
+        <Dashboard activeTab={activeTab} />
       </DashboardLayout>
     </DashboardProvider>
   );

@@ -413,7 +413,7 @@ function PermissionBanner({ role }: { role: string }) {
 // ============================================================
 // Dashboard principal
 // ============================================================
-export default function Dashboard() {
+export default function Dashboard({ activeTab }: { activeTab: string }) {
   const { hasPermission, currentUser } = useAuth();
   const { agendaItems, updateItemStatus } = useDashboard();
 
@@ -441,6 +441,90 @@ export default function Dashboard() {
     const concluidos = myItems.filter(i => i.status === 'concluido').length;
     return myItems.length > 0 ? Math.round((concluidos / myItems.length) * 100) : 42;
   }, [myItems]);
+
+  // Se estiver na aba Agendas
+  if (activeTab === 'agenda') {
+    return (
+      <div className="animate-[fadeIn_0.35s_ease] h-[calc(100vh-12rem)] min-h-[500px]">
+        <AgendaSection items={myItems} onUpdateStatus={updateItemStatus} />
+      </div>
+    );
+  }
+
+  // Se estiver na aba Google Forms
+  if (activeTab === 'forms') {
+    return (
+      <div className="animate-[fadeIn_0.35s_ease] space-y-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 max-w-2xl mx-auto">
+          <div className="mb-6 border-b border-gray-100 pb-5">
+            <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+              📝 Relatório de Visita Técnica & Comercial
+            </h2>
+            <p className="text-xs text-gray-500 mt-1">Este formulário simula o envio de relatórios comerciais e visitas técnicas para o Google Sheets/Forms da Valochi Sousa.</p>
+          </div>
+          
+          <form onSubmit={(e) => { e.preventDefault(); alert('Relatório enviado com sucesso!'); }} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase">Nome do Vendedor</label>
+                <input type="text" readOnly value={currentUser.name} className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-gray-100 bg-gray-50 text-gray-700 font-semibold focus:outline-none" />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase">Cargo / Perfil</label>
+                <input type="text" readOnly value={currentUser.role} className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-gray-100 bg-gray-50 text-gray-700 font-semibold focus:outline-none" />
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase">Cliente / Estabelecimento</label>
+              <input type="text" required placeholder="Ex: Panificadora Alfa, Mercadinho Silva..." className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-wine-500 focus:border-transparent transition-all" />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase">Data da Visita</label>
+                <input type="date" required defaultValue={new Date().toISOString().split('T')[0]} className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-gray-200 text-gray-800 focus:outline-none focus:ring-2 focus:ring-wine-500 focus:border-transparent transition-all" />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase">Tipo de Atendimento</label>
+                <select className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-gray-200 text-gray-800 focus:outline-none focus:ring-2 focus:ring-wine-500 focus:border-transparent transition-all cursor-pointer">
+                  <option>Visita Comercial de Vendas</option>
+                  <option>Acompanhamento Técnico (Padeiro)</option>
+                  <option>Entrega de Amostras de Pães</option>
+                  <option>Auditoria / Cobrança</option>
+                  <option>Outros</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase">Observações da Visita / Diagnóstico</label>
+              <textarea rows={4} placeholder="Descreva os pontos abordados, interesse em pão francês congelado, croissants, baguetes ou problemas com o forno/P&D..." className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-wine-500 focus:border-transparent transition-all resize-none" />
+            </div>
+
+            <button type="submit" className="w-full py-3.5 rounded-xl bg-gradient-to-r from-wine-800 to-wine-600 hover:from-wine-700 hover:to-wine-500 text-white font-bold text-xs uppercase tracking-widest shadow-md transition-all cursor-pointer">
+              Enviar Formulário de Visita
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  // Se estiver na aba Análise de Desempenho
+  if (activeTab === 'analise') {
+    return (
+      <div className="animate-[fadeIn_0.35s_ease] space-y-8">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <BarChart monthlyBase={Math.round(totalFaturamento)} />
+          <ProdutosMaisVendidos items={agendaItems} />
+        </div>
+        {hasPermission('canViewTeamPerformance') && (
+          <DesempenhoProfissional items={agendaItems} />
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 animate-[fadeIn_0.35s_ease]">
