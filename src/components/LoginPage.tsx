@@ -135,10 +135,8 @@ export default function LoginPage() {
                   value={username}
                   onChange={(e) => { setUsername(e.target.value); setError(''); }}
                   onKeyDown={(e) => e.key === 'Enter' && passRef.current?.focus()}
-                  className="w-full pl-12 pr-4 py-3.5 rounded-2xl text-sm font-medium
-                    bg-white/[0.04] border border-white/10 text-white placeholder-white/20
-                    focus:outline-none focus:ring-2 focus:ring-wine-500/80 focus:border-transparent focus:bg-black/40
-                    hover:border-white/20 hover:bg-white/[0.07] transition-all duration-300"
+                  style={{ paddingLeft: '48px' }}
+                  className="w-full pl-12 pr-4 py-3.5 rounded-2xl text-sm font-medium bg-white/[0.04] border border-white/10 text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-wine-500/80 focus:border-transparent focus:bg-black/40 hover:border-white/20 hover:bg-white/[0.07] transition-all duration-300"
                 />
               </div>
             </div>
@@ -162,11 +160,10 @@ export default function LoginPage() {
                   placeholder="Sua senha..."
                   value={password}
                   onChange={(e) => { setPassword(e.target.value); setError(''); }}
-                  className="w-full pl-12 pr-12 py-3.5 rounded-2xl text-sm font-medium
-                    bg-white/[0.04] border border-white/10 text-white placeholder-white/20
-                    focus:outline-none focus:ring-2 focus:ring-wine-500/80 focus:border-transparent focus:bg-black/40
-                    hover:border-white/20 hover:bg-white/[0.07] transition-all duration-300"
+                  style={{ paddingLeft: '48px', paddingRight: '48px' }}
+                  className="w-full pl-12 pr-12 py-3.5 rounded-2xl text-sm font-medium bg-white/[0.04] border border-white/10 text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-wine-500/80 focus:border-transparent focus:bg-black/40 hover:border-white/20 hover:bg-white/[0.07] transition-all duration-300"
                 />
+
                 <button
                   type="button"
                   onClick={() => setShowPass(!showPass)}
