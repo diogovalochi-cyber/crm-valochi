@@ -28,21 +28,21 @@ function KpiCard({ label, value, sub, icon, accent, change, positive }: {
   accent: string; change: string; positive: boolean;
 }) {
   return (
-    <div className="group bg-white rounded-2xl p-6 shadow-sm border border-ice-100
+    <div className="group bg-white rounded-xl p-5 shadow-sm border border-gray-100
       hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-default flex flex-col justify-between">
       <div>
-        <div className="flex items-center justify-between mb-4">
-          <p className="text-[10px] font-bold text-ice-400 uppercase tracking-widest leading-none">{label}</p>
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">{label}</p>
           <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm shadow-sm ring-1 ring-black/5 ${accent.split(' ')[0]}`}>{icon}</span>
         </div>
-        <p className="text-[26px] font-display font-semibold text-ice-900 tracking-tight leading-none mb-1.5">{value}</p>
-        {sub && <p className="text-xs text-ice-400 leading-tight mb-2">{sub}</p>}
+        <p className="text-xl font-bold text-gray-800 mt-1">{value}</p>
+        {sub && <p className="text-xs text-gray-400 mt-1">{sub}</p>}
       </div>
-      <div className="flex items-center gap-2 mt-4 pt-1">
-        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${positive ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-500'}`}>
+      <div className="flex items-center gap-2 mt-4">
+        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${positive ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>
           {positive ? '↑' : '↓'} {change}
         </span>
-        <span className="text-[10px] font-medium text-ice-400">vs mês anterior</span>
+        <span className="text-xs font-medium text-gray-500">vs mês anterior</span>
       </div>
     </div>
   );
@@ -67,7 +67,7 @@ function BarChart({ monthlyBase }: { monthlyBase: number }) {
   const maxVal = Math.max(...meses.map(m => m.val));
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-full">
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 h-full">
       <div className="flex items-center justify-between mb-5">
         <div>
           <h3 className="text-sm font-display font-bold text-ice-900">Faturamento Mensal</h3>
@@ -120,8 +120,8 @@ function AgendaSection({ items, onUpdateStatus }: {
   const todayItems = items.filter(i => i.data >= today).slice(0, 7);
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-ice-100 overflow-hidden h-full flex flex-col">
-      <div className="flex items-center justify-between px-6 py-5 border-b border-ice-100/60">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 h-full flex flex-col justify-between">
+      <div className="flex items-center justify-between pb-5 border-b border-gray-100">
         <div>
           <h3 className="text-sm font-display font-bold text-ice-900">Agenda da Semana</h3>
           <p className="text-xs text-ice-400 mt-0.5">{todayItems.length} compromisso(s) próximos</p>
@@ -192,7 +192,7 @@ function FunilVendas({ totalLeads }: { totalLeads: number }) {
   ], [totalLeads]);
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-sm border border-ice-100 h-full flex flex-col justify-between">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 h-full flex flex-col justify-between">
       <div className="mb-5">
         <h3 className="text-sm font-display font-bold text-ice-900">Funil de Vendas</h3>
         <p className="text-xs text-ice-400 mt-0.5">{totalLeads} leads no pipeline</p>
@@ -235,7 +235,7 @@ function DesempenhoProfissional({ items }: { items: AgendaItem[] }) {
   }), [items]);
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
       <div className="mb-5">
         <h3 className="text-sm font-display font-bold text-ice-900">Desempenho por Profissional</h3>
         <p className="text-xs text-ice-400 mt-0.5">Top performers do mês</p>
@@ -284,7 +284,7 @@ function MetaVendedor({ items, meta = 50000, userId }: { items: AgendaItem[]; me
   const faltam = Math.max(meta - atual, 0);
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-sm font-display font-bold text-ice-900">Minha Meta Mensal</h3>
@@ -358,7 +358,7 @@ function ProdutosMaisVendidos({ items }: { items: AgendaItem[] }) {
   const maxTotal = Math.max(...produtos.map(p => p.total));
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
       <div className="mb-5">
         <h3 className="text-sm font-display font-bold text-ice-900">Produtos Mais Vendidos</h3>
         <p className="text-xs text-ice-400 mt-0.5">Baseado nos registros do mês</p>
@@ -400,7 +400,7 @@ function PermissionBanner({ role }: { role: string }) {
   const info = msgs[role];
   if (!info) return null;
   return (
-    <div className="flex items-center gap-3 bg-white border border-wine-200 rounded-2xl px-5 py-4 shadow-sm">
+    <div className="flex items-center gap-3 bg-white border border-wine-200 rounded-xl px-5 py-4 shadow-sm">
       <span className="text-2xl shrink-0">{info.icon}</span>
       <div>
         <p className="text-sm font-semibold text-wine-900">Visão restrita ao perfil {role}</p>
@@ -456,11 +456,7 @@ export default function Dashboard() {
 
       {/* KPIs */}
       {hasPermission('canViewOwnStats') && (
-        <div className={`grid gap-6 ${
-          hasPermission('canViewFullRevenue')
-            ? 'grid-cols-2 xl:grid-cols-3'
-            : 'grid-cols-2'
-        }`}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {hasPermission('canViewFullRevenue') && (
             <>
               <KpiCard
@@ -525,12 +521,12 @@ export default function Dashboard() {
       {hasPermission('canViewWeeklyAgenda') && (
         <>
           {/* Agenda + Funil */}
-          <div className={`grid gap-6 ${hasPermission('canViewAllLeads') ? 'grid-cols-1 xl:grid-cols-5' : 'grid-cols-1'}`}>
-            <div className={hasPermission('canViewAllLeads') ? 'xl:col-span-3' : ''}>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+            <div className={hasPermission('canViewAllLeads') ? 'lg:col-span-2' : ''}>
               <AgendaSection items={myItems} onUpdateStatus={updateItemStatus} />
             </div>
             {hasPermission('canViewAllLeads') && (
-              <div className="xl:col-span-2">
+              <div className="lg:col-span-1">
                 <FunilVendas totalLeads={totalLeads} />
               </div>
             )}

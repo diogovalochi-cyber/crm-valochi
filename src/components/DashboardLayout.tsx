@@ -106,7 +106,7 @@ function Sidebar({ activeItem, onNavigate, collapsed, onToggle }: {
       bg-gradient-to-b from-wine-950 via-wine-900 to-wine-950
       border-r border-wine-800/40
       transition-all duration-300 ease-in-out
-      ${collapsed ? 'w-[72px]' : 'w-64'}
+      ${collapsed ? 'w-[72px] min-w-[72px] max-w-[72px]' : 'w-64 min-w-[16rem] max-w-[16rem]'}
       shadow-2xl shadow-wine-950/80
     `}>
       {/* Logo / Marca */}
@@ -285,8 +285,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Área principal */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <Header activeItem={activeItem} onAdd={() => setShowAddModal(true)} />
-        <main className="flex-1 overflow-y-auto p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto">
+        <main className="flex-1 bg-gray-50/50 overflow-y-auto p-8">
+          <div className="max-w-7xl mx-auto w-full">
             {children}
           </div>
         </main>
