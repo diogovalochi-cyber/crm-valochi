@@ -880,36 +880,36 @@ export default function Dashboard({ activeTab }: { activeTab: string }) {
       {/* Layout variável por permissão */}
       {hasPermission('canViewWeeklyAgenda') && (
         <>
-          {/* Agenda + Funil */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
-            <div className={hasPermission('canViewAllLeads') ? 'lg:col-span-2' : ''}>
-              <AgendaSection items={myItems} onUpdateStatus={updateItemStatus} />
-            </div>
-            {hasPermission('canViewAllLeads') && (
-              <div className="lg:col-span-1">
-                <FunilVendas totalLeads={totalLeads} />
-              </div>
-            )}
-          </div>
-
-          {/* Gráfico + Produtos — só para quem vê faturamento */}
+          {/* Gráfico de Faturamento Mensal — agora em largura total */}
           {hasPermission('canViewFullRevenue') && (
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+            <div className="w-full mt-6">
               <BarChart monthlyBase={Math.round(totalFaturamento)} />
-              <ProdutosMaisVendidos items={agendaItems} />
             </div>
           )}
 
-          {/* Desempenho — só gerentes/supervisores/analistas */}
+          {/* Grid de Desempenho por Profissional + Funil de Vendas */}
           {hasPermission('canViewTeamPerformance') && (
-            <DesempenhoProfissional onSelectVendedor={setSelectedVendedor} />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+              <div className="lg:col-span-2">
+                <DesempenhoProfissional onSelectVendedor={setSelectedVendedor} />
+              </div>
+              {hasPermission('canViewAllLeads') && (
+                <div className="lg:col-span-1">
+                  <FunilVendas totalLeads={totalLeads} />
+                </div>
+              )}
+            </div>
           )}
         </>
       )}
 
-      {/* Técnico: só agenda, sem nada mais */}
+      {/* Técnico: orientação para acessar aba de agendas */}
       {!hasPermission('canViewOwnStats') && hasPermission('canViewWeeklyAgenda') && (
-        <AgendaSection items={agendaItems} onUpdateStatus={updateItemStatus} />
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 max-w-2xl mx-auto text-center my-8">
+          <p className="text-4xl mb-3">📅</p>
+          <h3 className="text-sm font-bold text-ice-900">Agenda Técnica e Comercial</h3>
+          <p className="text-xs text-ice-500 mt-1 max-w-md mx-auto">Para visualizar seu cronograma completo de compromissos, visitas técnicas e atendimentos da semana, por favor acesse a aba **Agendas** no menu lateral esquerdo.</p>
+        </div>
       )}
 
       {/* Modal de Carteira de Clientes */}
