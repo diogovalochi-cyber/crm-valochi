@@ -28,22 +28,22 @@ function KpiCard({ label, value, sub, icon, accent, change, positive }: {
   accent: string; change: string; positive: boolean;
 }) {
   return (
-    <div className="group bg-white rounded-2xl p-5 shadow-sm border border-gray-100
-      hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-default">
-      <div className="flex items-start justify-between mb-3">
-        <p className="text-[11px] font-bold text-ice-400 uppercase tracking-widest leading-none">{label}</p>
-        <span className={`w-9 h-9 rounded-xl flex items-center justify-center text-lg ${accent}`}>{icon}</span>
+    <div className="group bg-white rounded-2xl p-6 shadow-sm border border-ice-100
+      hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-default flex flex-col justify-between">
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <p className="text-[10px] font-bold text-ice-400 uppercase tracking-widest leading-none">{label}</p>
+          <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm shadow-sm ring-1 ring-black/5 ${accent.split(' ')[0]}`}>{icon}</span>
+        </div>
+        <p className="text-[26px] font-display font-semibold text-ice-900 tracking-tight leading-none mb-1.5">{value}</p>
+        {sub && <p className="text-xs text-ice-400 leading-tight mb-2">{sub}</p>}
       </div>
-      <p className="text-2xl font-display font-bold text-ice-900 leading-none mb-1">{value}</p>
-      {sub && <p className="text-xs text-ice-400 mb-2">{sub}</p>}
-      <div className="flex items-center gap-1.5 mt-3">
-        <span className={`text-xs font-semibold ${positive ? 'text-emerald-600' : 'text-red-500'}`}>
+      <div className="flex items-center gap-2 mt-4 pt-1">
+        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${positive ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-500'}`}>
           {positive ? '↑' : '↓'} {change}
         </span>
-        <span className="text-[10px] text-ice-400">vs mês anterior</span>
+        <span className="text-[10px] font-medium text-ice-400">vs mês anterior</span>
       </div>
-      <div className={`mt-3 h-0.5 rounded-full bg-gradient-to-r ${accent.replace('bg-', 'from-').split(' ')[0]} to-transparent
-        w-10 group-hover:w-full transition-all duration-500`} />
     </div>
   );
 }
@@ -120,51 +120,56 @@ function AgendaSection({ items, onUpdateStatus }: {
   const todayItems = items.filter(i => i.data >= today).slice(0, 7);
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-      <div className="flex items-center justify-between px-5 py-4 border-b border-ice-100">
+    <div className="bg-white rounded-2xl shadow-sm border border-ice-100 overflow-hidden h-full flex flex-col">
+      <div className="flex items-center justify-between px-6 py-5 border-b border-ice-100/60">
         <div>
           <h3 className="text-sm font-display font-bold text-ice-900">Agenda da Semana</h3>
           <p className="text-xs text-ice-400 mt-0.5">{todayItems.length} compromisso(s) próximos</p>
         </div>
-        <span className="text-xs font-semibold text-wine-600 bg-wine-50 border border-wine-100 px-2.5 py-1 rounded-lg">
+        <span className="text-xs font-semibold text-wine-600 bg-wine-50/80 border border-wine-100/50 px-3 py-1 rounded-xl shadow-sm">
           {new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}
         </span>
       </div>
 
-      <div className="divide-y divide-ice-50">
+      <div className="divide-y divide-ice-100/50 flex-1 overflow-y-auto">
         {todayItems.length === 0 ? (
-          <div className="px-5 py-10 text-center">
+          <div className="px-6 py-12 text-center my-auto">
             <p className="text-3xl mb-2">📅</p>
-            <p className="text-sm text-ice-400">Nenhum compromisso agendado</p>
-            <p className="text-xs text-ice-300 mt-1">Registre um atendimento para começar</p>
+            <p className="text-sm font-medium text-ice-500">Nenhum compromisso agendado</p>
+            <p className="text-xs text-ice-400 mt-1">Registre um atendimento para começar</p>
           </div>
         ) : todayItems.map((item) => (
-          <div key={item.id} className="flex items-center gap-3 px-5 py-3.5 hover:bg-ice-50/50 transition-colors group">
-            <div className="shrink-0 text-center w-14">
-              <span className="text-xs font-bold text-wine-700 bg-wine-50 border border-wine-100 px-2 py-1 rounded-lg block">
+          <div key={item.id} className="flex items-center gap-4 px-6 py-4 hover:bg-ice-50/50 transition-colors group">
+            {/* Bloco de Data e Hora - Alinhado à esquerda */}
+            <div className="shrink-0 flex items-center gap-2.5 w-[110px]">
+              <span className="text-xs font-bold text-wine-800 bg-wine-50/80 border border-wine-100/60 px-2 py-0.5 rounded-lg shadow-sm">
                 {item.hora}
               </span>
-              <span className="text-[9px] text-ice-400 mt-0.5 block">
+              <span className="text-[10px] font-semibold text-ice-400 whitespace-nowrap uppercase tracking-wider">
                 {new Date(item.data + 'T12:00').toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}
               </span>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-ice-900 truncate">{item.cliente}</p>
-              <p className="text-xs text-ice-400 truncate">{item.tipo}</p>
-            </div>
-            <div className="text-right shrink-0">
-              <p className="text-xs font-bold text-ice-800">{fmt(item.valor)}</p>
-              {/* Status clicável */}
-              <select
-                value={item.status}
-                onChange={(e) => onUpdateStatus(item.id, e.target.value as AgendaItem['status'])}
-                className={`mt-0.5 text-[10px] font-semibold px-2 py-0.5 rounded-full cursor-pointer border-0 bg-transparent
-                  focus:outline-none focus:ring-1 focus:ring-wine-300 ${STATUS_STYLE[item.status]}`}
-              >
-                <option value="confirmado">✅ Confirmado</option>
-                <option value="pendente">⏳ Pendente</option>
-                <option value="concluido">🎯 Concluído</option>
-              </select>
+            
+            {/* Bloco Central - Cliente + Produto em formato flex expandido */}
+            <div className="flex-1 min-w-0 flex items-center justify-between gap-6">
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-semibold text-ice-900 truncate group-hover:text-wine-800 transition-colors">{item.cliente}</p>
+                <p className="text-xs text-ice-400 mt-0.5 truncate font-normal leading-relaxed">{item.tipo}</p>
+              </div>
+              
+              {/* Bloco de Ação - Valor + Dropdown de Status Lado a Lado */}
+              <div className="flex items-center gap-4 shrink-0">
+                <span className="text-xs font-bold text-ice-800 tabular-nums">{fmt(item.valor)}</span>
+                <select
+                  value={item.status}
+                  onChange={(e) => onUpdateStatus(item.id, e.target.value as AgendaItem['status'])}
+                  className={`text-[10px] font-semibold px-2.5 py-1 rounded-full cursor-pointer border border-transparent shadow-sm focus:outline-none focus:ring-2 focus:ring-wine-300 transition-all ${STATUS_STYLE[item.status]}`}
+                >
+                  <option value="confirmado">✅ Confirmado</option>
+                  <option value="pendente">⏳ Pendente</option>
+                  <option value="concluido">🎯 Concluído</option>
+                </select>
+              </div>
             </div>
           </div>
         ))}
@@ -187,21 +192,21 @@ function FunilVendas({ totalLeads }: { totalLeads: number }) {
   ], [totalLeads]);
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-      <div className="mb-4">
+    <div className="bg-white rounded-2xl p-6 shadow-sm border border-ice-100 h-full flex flex-col justify-between">
+      <div className="mb-5">
         <h3 className="text-sm font-display font-bold text-ice-900">Funil de Vendas</h3>
         <p className="text-xs text-ice-400 mt-0.5">{totalLeads} leads no pipeline</p>
       </div>
-      <div className="space-y-3">
+      <div className="space-y-4 flex-1 flex flex-col justify-center">
         {funil.map((item) => (
           <div key={item.label}>
-            <div className="flex justify-between items-center mb-1.5">
-              <span className="text-xs font-medium text-ice-700">{item.label}</span>
-              <span className="text-xs font-bold text-ice-900 tabular-nums">{item.val}</span>
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-[11px] font-semibold text-ice-500">{item.label}</span>
+              <span className="text-[11px] font-bold text-ice-900 tabular-nums">{item.val}</span>
             </div>
-            <div className="w-full bg-ice-100 rounded-full h-2 overflow-hidden">
+            <div className="w-full bg-wine-50/50 rounded-full h-1 overflow-hidden">
               <div
-                className="h-2 rounded-full bg-gradient-to-r from-wine-700 to-wine-400 transition-all duration-700"
+                className="h-1 rounded-full bg-gradient-to-r from-wine-800 to-wine-500/80 transition-all duration-700"
                 style={{ width: `${item.pct}%` }}
               />
             </div>
@@ -438,7 +443,7 @@ export default function Dashboard() {
   }, [myItems]);
 
   return (
-    <div className="space-y-6 animate-[fadeIn_0.35s_ease]">
+    <div className="space-y-8 animate-[fadeIn_0.35s_ease]">
       {/* Banner de permissão */}
       {(!hasPermission('canViewFullRevenue')) && (
         <PermissionBanner role={currentUser.role} />
@@ -451,7 +456,7 @@ export default function Dashboard() {
 
       {/* KPIs */}
       {hasPermission('canViewOwnStats') && (
-        <div className={`grid gap-4 ${
+        <div className={`grid gap-6 ${
           hasPermission('canViewFullRevenue')
             ? 'grid-cols-2 xl:grid-cols-3'
             : 'grid-cols-2'
@@ -462,7 +467,7 @@ export default function Dashboard() {
                 label="Faturamento Mensal"
                 value={fmt(totalFaturamento)}
                 icon="💰"
-                accent="bg-wine-100"
+                accent="bg-wine-50 text-wine-700"
                 change="+12%"
                 positive
               />
@@ -470,7 +475,7 @@ export default function Dashboard() {
                 label="Lucro Líquido"
                 value={fmt(totalFaturamento * 0.60)}
                 icon="📈"
-                accent="bg-wine-100"
+                accent="bg-wine-50 text-wine-700"
                 change="+8%"
                 positive
               />
@@ -481,7 +486,7 @@ export default function Dashboard() {
             value={totalAtendimentos.toString()}
             sub={hasPermission('canViewAllLeads') ? 'Total da equipe' : 'Seus atendimentos'}
             icon="🎯"
-            accent="bg-ice-100"
+            accent="bg-ice-50 text-ice-600"
             change={`+${myItems.length}`}
             positive
           />
@@ -491,7 +496,7 @@ export default function Dashboard() {
                 label="Leads Ativos"
                 value={totalLeads.toString()}
                 icon="🧲"
-                accent="bg-wine-100"
+                accent="bg-wine-50 text-wine-700"
                 change="+15"
                 positive
               />
@@ -499,7 +504,7 @@ export default function Dashboard() {
                 label="Taxa de Conversão"
                 value={`${taxaConversao}%`}
                 icon="⚡"
-                accent="bg-ice-100"
+                accent="bg-ice-50 text-ice-600"
                 change={taxaConversao >= 40 ? '+3%' : '-2%'}
                 positive={taxaConversao >= 40}
               />
@@ -507,7 +512,7 @@ export default function Dashboard() {
                 label="Pedidos Perdidos"
                 value={(Math.max(0, 18 - myItems.filter(i => i.status === 'concluido').length)).toString()}
                 icon="⚠️"
-                accent="bg-red-50"
+                accent="bg-red-50 text-red-600"
                 change="-4"
                 positive
               />
@@ -520,7 +525,7 @@ export default function Dashboard() {
       {hasPermission('canViewWeeklyAgenda') && (
         <>
           {/* Agenda + Funil */}
-          <div className={`grid gap-4 ${hasPermission('canViewAllLeads') ? 'grid-cols-1 xl:grid-cols-5' : 'grid-cols-1'}`}>
+          <div className={`grid gap-6 ${hasPermission('canViewAllLeads') ? 'grid-cols-1 xl:grid-cols-5' : 'grid-cols-1'}`}>
             <div className={hasPermission('canViewAllLeads') ? 'xl:col-span-3' : ''}>
               <AgendaSection items={myItems} onUpdateStatus={updateItemStatus} />
             </div>
@@ -533,7 +538,7 @@ export default function Dashboard() {
 
           {/* Gráfico + Produtos — só para quem vê faturamento */}
           {hasPermission('canViewFullRevenue') && (
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
               <BarChart monthlyBase={Math.round(totalFaturamento)} />
               <ProdutosMaisVendidos items={agendaItems} />
             </div>

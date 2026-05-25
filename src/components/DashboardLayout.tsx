@@ -65,25 +65,25 @@ function NavButton({ item, active, collapsed, onClick }: {
       onClick={onClick}
       title={collapsed ? item.label : undefined}
       className={`
-        w-full flex items-center rounded-xl transition-all duration-200 group
-        ${collapsed ? 'justify-center p-2.5' : 'gap-3 px-3 py-2.5'}
+        w-full flex items-center rounded-xl transition-all duration-200 group cursor-pointer
+        ${collapsed ? 'justify-center p-2' : 'gap-2.5 px-3 py-2'}
         ${active
-          ? 'bg-white/10 text-white shadow-sm ring-1 ring-white/20'
+          ? 'bg-white/10 text-white shadow-sm ring-1 ring-white/15'
           : 'text-wine-400 hover:text-wine-100 hover:bg-white/5'
         }
       `}
     >
       <div className={`
-        shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all
-        ${active ? 'bg-wine-500 shadow-lg shadow-wine-900/50' : 'group-hover:bg-white/10'}
+        shrink-0 w-7 h-7 rounded-md flex items-center justify-center transition-all
+        ${active ? 'bg-wine-500 shadow-md shadow-wine-900/40' : 'group-hover:bg-white/10'}
       `}>
-        <Icon d={item.icon} className="w-4 h-4" />
+        <Icon d={item.icon} className="w-3.5 h-3.5" />
       </div>
       {!collapsed && (
-        <span className="text-sm font-medium whitespace-nowrap flex-1 text-left">{item.label}</span>
+        <span className="text-xs font-semibold whitespace-nowrap flex-1 text-left">{item.label}</span>
       )}
       {active && !collapsed && (
-        <div className="w-1.5 h-1.5 rounded-full bg-wine-400" />
+        <div className="w-1 h-1 rounded-full bg-wine-400" />
       )}
     </button>
   );
@@ -142,7 +142,7 @@ function Sidebar({ activeItem, onNavigate, collapsed, onToggle }: {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto py-4 px-2 space-y-0.5">
+      <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
         {!collapsed && (
           <p className="text-[9px] font-bold tracking-widest uppercase text-wine-600 px-3 pb-2">Menu Principal</p>
         )}
