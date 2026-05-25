@@ -26,61 +26,61 @@ export interface DashboardContextType {
 // ============================================================
 const SELLER_DATA: Record<string, AgendaItem[]> = {
   // Guilherme — Cód 093
-  '4': [
-    { id: 'g1', hora: '08:30', cliente: 'Samuel de Oliveira Chagas', tipo: 'Pão Francês Congelado', status: 'concluido', valor: 154294.00, vendedorId: '4', data: '2026-05-20' },
-    { id: 'g2', hora: '10:30', cliente: 'Rede Fast Food Central', tipo: 'Mix Pães Especiais',     status: 'concluido', valor: 75400.00, vendedorId: '4', data: '2026-05-21' },
-    { id: 'g3', hora: '14:00', cliente: 'Panificadora Estrela do Norte', tipo: 'Baguete Artesanal',  status: 'concluido', valor: 52800.00, vendedorId: '4', data: '2026-05-22' },
-    { id: 'g4', hora: '09:00', cliente: 'Supermercado Boa Compra',      tipo: 'Croissant Premium',      status: 'confirmado',valor: 38500.00, vendedorId: '4', data: '2026-05-25' },
-    { id: 'g5', hora: '11:00', cliente: 'Café da Manhã Feliz',         tipo: 'Kit Café da Manhã',      status: 'pendente',  valor: 2100.00, vendedorId: '4', data: '2026-05-26' },
+  '093': [
+    { id: 'g1', hora: '08:30', cliente: 'SAMUEL DE OLIVEIRA CHAGAS', tipo: 'Pão Francês Congelado', status: 'concluido', valor: 25928.72, vendedorId: '093', data: '2026-05-20' },
+    { id: 'g2', hora: '10:30', cliente: 'AÇOUGUE TENESSE', tipo: 'Mix Pães Especiais',     status: 'concluido', valor: 20220.24, vendedorId: '093', data: '2026-05-21' },
+    { id: 'g3', hora: '14:00', cliente: 'INTECS JARDIM JARAGUA', tipo: 'Baguete Artesanal',  status: 'concluido', valor: 23848.43, vendedorId: '093', data: '2026-05-22' },
+    { id: 'g4', hora: '09:00', cliente: 'MERCADO ULTRA ECONOMIA',      tipo: 'Croissant Premium',      status: 'confirmado',valor: 16410.78, vendedorId: '093', data: '2026-05-25' },
+    { id: 'g5', hora: '11:00', cliente: 'PADARIA DONA BELLA',         tipo: 'Kit Café da Manhã',      status: 'pendente',  valor: 570.38, vendedorId: '093', data: '2026-05-26' },
   ],
   // Natália — Cód 116
-  '5': [
-    { id: 'n1', hora: '08:30', cliente: 'Distribuidora de Hortifruti',   tipo: 'Pão Francês Congelado', status: 'concluido', valor: 45800.00, vendedorId: '5', data: '2026-05-19' },
-    { id: 'n2', hora: '10:00', cliente: 'Rede Supermercados ABC',      tipo: 'Ciabatta Especial',      status: 'concluido', valor: 39200.00, vendedorId: '5', data: '2026-05-20' },
-    { id: 'n3', hora: '13:30', cliente: 'Supermercado Peteko',       tipo: 'Kit Café da Manhã',      status: 'concluido', valor: 28100.00, vendedorId: '5', data: '2026-05-21' },
-    { id: 'n4', hora: '09:00', cliente: 'Padaria Premium Sul',          tipo: 'Pão de Queijo CG',       status: 'confirmado',valor: 21400.00, vendedorId: '5', data: '2026-05-25' },
+  '116': [
+    { id: 'n1', hora: '08:30', cliente: 'DISTRIBUIDORA DE HORTIFRUTIGRANJEIRO',   tipo: 'Pão Francês Congelado', status: 'concluido', valor: 22098.07, vendedorId: '116', data: '2026-05-19' },
+    { id: 'n2', hora: '10:00', cliente: 'SUPERMERCADO PETEKO',      tipo: 'Ciabatta Especial',      status: 'concluido', valor: 17304.93, vendedorId: '116', data: '2026-05-20' },
+    { id: 'n3', hora: '13:30', cliente: 'MERCADO GONÇALVES',       tipo: 'Kit Café da Manhã',      status: 'concluido', valor: 8903.95, vendedorId: '116', data: '2026-05-21' },
+    { id: 'n4', hora: '09:00', cliente: 'PAOZINHO DO CEU',          tipo: 'Pão de Queijo CG',       status: 'confirmado',valor: 4372.18, vendedorId: '116', data: '2026-05-25' },
   ],
   // Keller — Cód 117
-  '6': [
-    { id: 'k1', hora: '07:30', cliente: 'Nova Geração Loja 1',  tipo: 'Pão Francês Congelado', status: 'concluido', valor: 31400.00, vendedorId: '6', data: '2026-05-20' },
-    { id: 'k2', hora: '10:00', cliente: 'Cooperativa Agrícola SP',   tipo: 'Pão de Forma Premium',  status: 'concluido', valor: 27500.00, vendedorId: '6', data: '2026-05-22' },
-    { id: 'k3', hora: '14:00', cliente: 'Armazém Campo & Cidade',    tipo: 'Kit Café da Manhã',      status: 'confirmado',valor: 19800.00, vendedorId: '6', data: '2026-05-25' },
-    { id: 'k4', hora: '09:30', cliente: 'Fazenda Rancho Alegre',    tipo: 'Baguete Artesanal',      status: 'pendente',  valor: 15200.00, vendedorId: '6', data: '2026-05-26' },
+  '117': [
+    { id: 'k1', hora: '07:30', cliente: 'NOVA GERAÇÃO LOJA 1',  tipo: 'Pão Francês Congelado', status: 'concluido', valor: 13419.60, vendedorId: '117', data: '2026-05-20' },
+    { id: 'k2', hora: '10:00', cliente: 'MERCEARIA E ADEGA LOPES',   tipo: 'Pão de Forma Premium',  status: 'concluido', valor: 4120.19, vendedorId: '117', data: '2026-05-22' },
+    { id: 'k3', hora: '14:00', cliente: 'PADARIA DA VILA',    tipo: 'Kit Café da Manhã',      status: 'confirmado',valor: 4839.80, vendedorId: '117', data: '2026-05-25' },
+    { id: 'k4', hora: '09:30', cliente: 'RANCHO NOGUEIRAS',    tipo: 'Baguete Artesanal',      status: 'pendente',  valor: 2126.66, vendedorId: '117', data: '2026-05-26' },
   ],
   // Israel — Cód 115
-  '7': [
-    { id: 'i1', hora: '09:00', cliente: 'Ipava Raio Supermercado',         tipo: 'Pão Francês Congelado', status: 'concluido', valor: 48200.00,vendedorId: '7', data: '2026-05-18' },
-    { id: 'i2', hora: '11:00', cliente: 'Rede Giraffas SP',       tipo: 'Pão de Forma Premium',  status: 'concluido', valor: 39500.00, vendedorId: '7', data: '2026-05-20' },
-    { id: 'i3', hora: '14:30', cliente: 'Hospital São Lucas',    tipo: 'Pão de Queijo CG',       status: 'concluido', valor: 27400.00, vendedorId: '7', data: '2026-05-21' },
-    { id: 'i4', hora: '08:30', cliente: 'Cantina Universitária',   tipo: 'Ciabatta Especial',      status: 'confirmado',valor: 22800.00, vendedorId: '7', data: '2026-05-25' },
+  '115': [
+    { id: 'i1', hora: '09:00', cliente: 'IPAVA RAIO SUPERMERCADO LTDA',         tipo: 'Pão Francês Congelado', status: 'concluido', valor: 15966.12, vendedorId: '115', data: '2026-05-18' },
+    { id: 'i2', hora: '11:00', cliente: 'BLACK BOI',       tipo: 'Pão de Forma Premium',  status: 'concluido', valor: 6697.29, vendedorId: '115', data: '2026-05-20' },
+    { id: 'i3', hora: '14:30', cliente: 'PADARIA GOLDEN GRAO MERCADO',    tipo: 'Pão de Queijo CG',       status: 'concluido', valor: 3603.15, vendedorId: '115', data: '2026-05-21' },
+    { id: 'i4', hora: '08:30', cliente: 'DUBOM CAFE',   tipo: 'Ciabatta Especial',      status: 'confirmado',valor: 2518.43, vendedorId: '115', data: '2026-05-25' },
   ],
   // Althieres — Cód 119
-  '8': [
-    { id: 'a1', hora: '08:00', cliente: 'Compre Bem',      tipo: 'Pão Francês Congelado', status: 'concluido', valor: 21800.00, vendedorId: '8', data: '2026-05-19' },
-    { id: 'a2', hora: '10:30', cliente: 'Padaria Família ABC',      tipo: 'Croissant Premium',      status: 'concluido', valor: 17500.00, vendedorId: '8', data: '2026-05-21' },
-    { id: 'a3', hora: '13:00', cliente: 'Mercadão Santo André',  tipo: 'Pão de Forma Premium',  status: 'confirmado',valor: 14200.00, vendedorId: '8', data: '2026-05-25' },
-    { id: 'a4', hora: '15:30', cliente: 'Lanchonete Sabor & Arte',          tipo: 'Pão de Queijo CG',       status: 'pendente',  valor: 9800.00, vendedorId: '8', data: '2026-05-26' },
+  '119': [
+    { id: 'a1', hora: '08:00', cliente: 'COMPRE BEM',      tipo: 'Pão Francês Congelado', status: 'concluido', valor: 6225.52, vendedorId: '119', data: '2026-05-19' },
+    { id: 'a2', hora: '10:30', cliente: 'FERREIRA PAES E DOCES',      tipo: 'Croissant Premium',      status: 'concluido', valor: 4305.97, vendedorId: '119', data: '2026-05-21' },
+    { id: 'a3', hora: '13:00', cliente: 'PANIFICADORA VILLAGE',  tipo: 'Pão de Forma Premium',  status: 'confirmado',valor: 1682.60, vendedorId: '119', data: '2026-05-25' },
+    { id: 'a4', hora: '15:30', cliente: 'CHARMOSA',          tipo: 'Pão de Queijo CG',       status: 'pendente',  valor: 960.00, vendedorId: '119', data: '2026-05-26' },
   ],
   // Jorge — Cód 118
-  '9': [
-    { id: 'j1', hora: '09:30', cliente: 'Familia Varejo',tipo: 'Kit Café da Manhã',      status: 'concluido', valor: 14500.00, vendedorId: '9', data: '2026-05-20' },
-    { id: 'j2', hora: '11:00', cliente: 'Hotel Praia Grande Palace',        tipo: 'Croissant Premium',      status: 'concluido', valor: 11200.00, vendedorId: '9', data: '2026-05-22' },
-    { id: 'j3', hora: '14:00', cliente: 'Pousada Beira Mar',       tipo: 'Baguete Artesanal',      status: 'confirmado',valor: 8500.00,  vendedorId: '9', data: '2026-05-25' },
-    { id: 'j4', hora: '16:30', cliente: 'Restaurante Âncora',      tipo: 'Pão Francês Congelado', status: 'pendente',  valor: 5600.00,  vendedorId: '9', data: '2026-05-26' },
+  '118': [
+    { id: 'j1', hora: '09:30', cliente: 'FAMILIA VAREJO',tipo: 'Kit Café da Manhã',      status: 'concluido', valor: 12648.85, vendedorId: '118', data: '2026-05-20' },
+    { id: 'j2', hora: '11:00', cliente: 'MERCADO ALIANÇA LOJA 3',        tipo: 'Croissant Premium',      status: 'concluido', valor: 3315.77, vendedorId: '118', data: '2026-05-22' },
+    { id: 'j3', hora: '14:00', cliente: 'PADARIA GIRASSOL',       tipo: 'Baguete Artesanal',      status: 'confirmado',valor: 1115.03,  vendedorId: '118', data: '2026-05-25' },
+    { id: 'j4', hora: '16:30', cliente: 'PADARIA BELLA CASA NOVA',      tipo: 'Pão Francês Congelado', status: 'pendente',  valor: 352.59,  vendedorId: '118', data: '2026-05-26' },
   ],
   // Everaldo — Cód 107
-  '10': [
-    { id: 'e1', hora: '08:00', cliente: 'Mercado Trindade',  tipo: 'Pão Francês Congelado', status: 'concluido', valor: 22400.00, vendedorId: '10', data: '2026-05-19' },
-    { id: 'e2', hora: '10:00', cliente: 'Supermercados Boa Vista',        tipo: 'Pão de Forma Premium',  status: 'concluido', valor: 19200.00, vendedorId: '10', data: '2026-05-21' },
-    { id: 'e3', hora: '13:30', cliente: 'Padaria São Paulo',     tipo: 'Mix Pães Especiais',     status: 'concluido', valor: 15400.00, vendedorId: '10', data: '2026-05-22' },
-    { id: 'e4', hora: '09:00', cliente: 'Panificadora Central',  tipo: 'Ciabatta Especial',      status: 'confirmado',valor: 12800.00, vendedorId: '10', data: '2026-05-25' },
+  '107': [
+    { id: 'e1', hora: '08:00', cliente: 'MERCADO TRINDADE',  tipo: 'Pão Francês Congelado', status: 'concluido', valor: 8748.59, vendedorId: '107', data: '2026-05-19' },
+    { id: 'e2', hora: '10:00', cliente: 'COMERCIO DO RATINHO',        tipo: 'Pão de Forma Premium',  status: 'concluido', valor: 8324.73, vendedorId: '107', data: '2026-05-21' },
+    { id: 'e3', hora: '13:30', cliente: 'SUPERMERCADO FAMILIA',     tipo: 'Mix Pães Especiais',     status: 'concluido', valor: 4738.82, vendedorId: '107', data: '2026-05-22' },
+    { id: 'e4', hora: '09:00', cliente: 'PADARIA PAULISTINHA',  tipo: 'Ciabatta Especial',      status: 'confirmado',valor: 1228.35, vendedorId: '107', data: '2026-05-25' },
   ],
   // Relson — Cód 094
-  '11': [
-    { id: 'r1', hora: '07:30', cliente: 'Peg Leve',          tipo: 'Pão Francês Congelado', status: 'concluido', valor: 32501.96, vendedorId: '11', data: '2026-05-19' },
-    { id: 'r2', hora: '10:00', cliente: 'Embraer Cantina',  tipo: 'Croissant Premium',      status: 'concluido', valor: 28400.00, vendedorId: '11', data: '2026-05-21' },
-    { id: 'r3', hora: '13:00', cliente: 'Padaria Vale das Letras',    tipo: 'Kit Café da Manhã',      status: 'concluido', valor: 21200.00, vendedorId: '11', data: '2026-05-22' },
-    { id: 'r4', hora: '09:30', cliente: 'Hotel Quatro Estações',      tipo: 'Pão de Forma Premium',  status: 'confirmado',valor: 18500.00, vendedorId: '11', data: '2026-05-25' },
+  '094': [
+    { id: 'r1', hora: '07:30', cliente: 'PEG LEVE',          tipo: 'Pão Francês Congelado', status: 'concluido', valor: 32501.96, vendedorId: '094', data: '2026-05-19' },
+    { id: 'r2', hora: '10:00', cliente: 'SUPERMERCADO DO FRANGO',  tipo: 'Croissant Premium',      status: 'concluido', valor: 13916.77, vendedorId: '094', data: '2026-05-21' },
+    { id: 'r3', hora: '13:00', cliente: 'MERCADO TRINDADE',    tipo: 'Kit Café da Manhã',      status: 'concluido', valor: 10052.56, vendedorId: '094', data: '2026-05-22' },
+    { id: 'r4', hora: '09:30', cliente: 'MERCADO NOGUEIRA',      tipo: 'Pão de Forma Premium',  status: 'confirmado',valor: 8650.21, vendedorId: '094', data: '2026-05-25' },
   ],
 };
 
