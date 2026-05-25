@@ -2,7 +2,7 @@
    IMPORTANTE: @import externo deve vir ANTES de qualquer regra CSS
    Importação de fontes do Google Fonts
    ============================================================ */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 @import "tailwindcss";
 
@@ -39,6 +39,7 @@
   /* Fontes */
   --font-sans: 'Inter', 'Outfit', system-ui, sans-serif;
   --font-display: 'Outfit', 'Inter', system-ui, sans-serif;
+  --font-poppins: 'Poppins', 'Inter', system-ui, sans-serif;
 
   /* Radius */
   --radius-xl: 1rem;
