@@ -39,7 +39,7 @@ export default function AddAppointmentModal({ isOpen, onClose }: AddAppointmentM
     data: today,
     valor: '',
     status: 'confirmado' as AgendaItem['status'],
-    vendedorId: currentUser.id,
+    vendedorId: currentUser?.id || '',
   });
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -74,7 +74,7 @@ export default function AddAppointmentModal({ isOpen, onClose }: AddAppointmentM
       setSuccess(true);
       setTimeout(() => {
         setSuccess(false);
-        setForm({ cliente: '', tipo: TIPOS_PRODUTO[0], hora: nowTime, data: today, valor: '', status: 'confirmado', vendedorId: currentUser.id });
+        setForm({ cliente: '', tipo: TIPOS_PRODUTO[0], hora: nowTime, data: today, valor: '', status: 'confirmado', vendedorId: currentUser?.id || '' });
         setErrors({});
         onClose();
       }, 1200);
@@ -182,7 +182,7 @@ export default function AddAppointmentModal({ isOpen, onClose }: AddAppointmentM
           </div>
 
           {/* Vendedor (só gerente/supervisor vê) */}
-          {(currentUser.role === 'GERENTE' || currentUser.role === 'SUPERVISOR') && (
+          {(currentUser?.role === 'GERENTE' || currentUser?.role === 'SUPERVISOR') && (
             <div>
               <label className="block text-xs font-semibold text-ice-600 mb-1.5 tracking-wide uppercase">Atribuir a</label>
               <select

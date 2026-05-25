@@ -97,6 +97,7 @@ function Sidebar({ activeItem, onNavigate, collapsed, onToggle }: {
   collapsed: boolean; onToggle: () => void;
 }) {
   const { currentUser, hasPermission, logout } = useAuth();
+  if (!currentUser) return null;
   const isVisible = (item: NavItem) => !item.permissionKey || hasPermission(item.permissionKey);
 
   return (
@@ -204,6 +205,7 @@ function Sidebar({ activeItem, onNavigate, collapsed, onToggle }: {
 // ============================================================
 function Header({ activeItem, onAdd }: { activeItem: string; onAdd: () => void }) {
   const { currentUser, hasPermission } = useAuth();
+  if (!currentUser) return null;
   const labels: Record<string, string> = {
     dashboard: 'Dashboard',
     kanban: 'Kanban',

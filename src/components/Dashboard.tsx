@@ -14,11 +14,11 @@ const STATUS_STYLE: Record<AgendaItem['status'], string> = {
   pendente:   'bg-amber-50  text-amber-700  border border-amber-200',
   concluido:  'bg-ice-100   text-ice-600    border border-ice-200',
 };
-const STATUS_LABEL: Record<AgendaItem['status'], string> = {
-  confirmado: '✅ Confirmado',
-  pendente:   '⏳ Pendente',
-  concluido:  '🎯 Concluído',
-};
+// const STATUS_LABEL: Record<AgendaItem['status'], string> = {
+//   confirmado: '✅ Confirmado',
+//   pendente:   '⏳ Pendente',
+//   concluido:  '🎯 Concluído',
+// };
 
 // ============================================================
 // KPI Card
@@ -411,6 +411,8 @@ function PermissionBanner({ role }: { role: string }) {
 export default function Dashboard() {
   const { hasPermission, currentUser } = useAuth();
   const { agendaItems, updateItemStatus } = useDashboard();
+
+  if (!currentUser) return null;
 
 
   // ---- Dados computados por role ----
