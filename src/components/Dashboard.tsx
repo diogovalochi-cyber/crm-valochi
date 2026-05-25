@@ -330,44 +330,7 @@ function AgendaSection({ items, onUpdateStatus }: {
   );
 }
 
-// ============================================================
-// Funil de Vendas
-// ============================================================
-function FunilVendas({ totalLeads }: { totalLeads: number }) {
-  const funil = useMemo(() => [
-    { label: 'Prospecção',   val: totalLeads,                pct: 100 },
-    { label: 'Atendimento',  val: Math.round(totalLeads * 0.70), pct: 70 },
-    { label: 'Follow-up',    val: Math.round(totalLeads * 0.51), pct: 51 },
-    { label: 'Proposta',     val: Math.round(totalLeads * 0.35), pct: 35 },
-    { label: 'Negociação',   val: Math.round(totalLeads * 0.25), pct: 25 },
-    { label: 'Fechamento',   val: Math.round(totalLeads * 0.18), pct: 18 },
-  ], [totalLeads]);
 
-  return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 h-full flex flex-col justify-between">
-      <div className="mb-5">
-        <h3 className="text-sm font-display font-bold text-ice-900">Funil de Vendas</h3>
-        <p className="text-xs text-ice-400 mt-0.5">{totalLeads} leads no pipeline</p>
-      </div>
-      <div className="space-y-4 flex-1 flex flex-col justify-center">
-        {funil.map((item) => (
-          <div key={item.label}>
-            <div className="flex justify-between items-center mb-1">
-              <span className="text-[11px] font-semibold text-ice-500">{item.label}</span>
-              <span className="text-[11px] font-bold text-ice-900 tabular-nums">{item.val}</span>
-            </div>
-            <div className="w-full bg-wine-50/50 rounded-full h-1 overflow-hidden">
-              <div
-                className="h-1 rounded-full bg-gradient-to-r from-wine-800 to-wine-500/80 transition-all duration-700"
-                style={{ width: `${item.pct}%` }}
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 // ============================================================
 // Desempenho por Profissional (Vendedores Oficiais)
@@ -609,28 +572,12 @@ export default function Dashboard({ activeTab }: { activeTab: string }) {
     return (currentSellerInfo?.faturamento ?? 32500) + newConcluidos;
   }, [hasPermission, currentSellerInfo, myItems]);
 
-  const totalAtendimentos = useMemo(() => {
-    if (hasPermission('canViewAllLeads')) {
-      return VENDEDORES_DATA.reduce((sum, v) => sum + v.pedidos, 0);
-    }
-    // Soma os novos atendimentos registrados na sessão
-    const newCount = myItems.filter(i => i.id.startsWith('new-')).length;
-    return (currentSellerInfo?.pedidos ?? 120) + newCount;
-  }, [hasPermission, currentSellerInfo, myItems]);
-
   const totalLeads = useMemo(() => {
     if (hasPermission('canViewAllLeads')) {
       return 150 + myItems.filter(i => i.id.startsWith('new-')).length;
     }
     return Math.round((currentSellerInfo?.pedidos ?? 10) * 1.5) + myItems.filter(i => i.id.startsWith('new-')).length;
   }, [hasPermission, currentSellerInfo, myItems]);
-
-  const taxaConversao = useMemo(() => {
-    if (hasPermission('canViewAllLeads')) {
-      return 68;
-    }
-    return 74;
-  }, [hasPermission]);
 
   // Se estiver na aba Agendas
   if (activeTab === 'agenda') {
@@ -814,66 +761,33 @@ export default function Dashboard({ activeTab }: { activeTab: string }) {
         <MetaVendedor items={agendaItems} meta={currentUser.meta} userId={currentUser.id} />
       )}
 
-      {/* KPIs */}
-      {hasPermission('canViewOwnStats') && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-          {hasPermission('canViewFullRevenue') && (
-            <>
-              <KpiCard
-                label="Faturamento Período"
-                value={fmt(totalFaturamento)}
-                icon="💰"
-                accent="bg-wine-50 text-wine-700"
-                change="+12%"
-                positive
-              />
-              <KpiCard
-                label="Lucro Líquido (Est.)"
-                value={fmt(totalFaturamento * 0.60)}
-                icon="📈"
-                accent="bg-wine-50 text-wine-700"
-                change="+8%"
-                positive
-              />
-            </>
-          )}
+      {/* KPIs — Visão Gerencial Consolidada (3 Colunas) */}
+      {hasPermission('canViewFullRevenue') && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <KpiCard
-            label="Pedidos / Atendimentos"
-            value={totalAtendimentos.toString()}
-            sub={hasPermission('canViewAllLeads') ? 'Total consolidado' : 'Seus atendimentos'}
-            icon="🎯"
-            accent="bg-ice-50 text-ice-600"
-            change={`+${myItems.length}`}
+            label="Faturamento Período"
+            value={fmt(totalFaturamento)}
+            icon="💰"
+            accent="bg-wine-50 text-wine-700"
+            change="+12%"
             positive
           />
-          {hasPermission('canViewAllLeads') && (
-            <>
-              <KpiCard
-                label="Leads Ativos"
-                value={totalLeads.toString()}
-                icon="🧲"
-                accent="bg-wine-50 text-wine-700"
-                change="+15"
-                positive
-              />
-              <KpiCard
-                label="Taxa de Conversão"
-                value={`${taxaConversao}%`}
-                icon="⚡"
-                accent="bg-ice-50 text-ice-600"
-                change={taxaConversao >= 40 ? '+3%' : '-2%'}
-                positive={taxaConversao >= 40}
-              />
-              <KpiCard
-                label="Pedidos Perdidos"
-                value={(Math.max(0, 18 - myItems.filter(i => i.status === 'concluido').length)).toString()}
-                icon="⚠️"
-                accent="bg-red-50 text-red-600"
-                change="-4"
-                positive
-              />
-            </>
-          )}
+          <KpiCard
+            label="Lucro Líquido (Est.)"
+            value={fmt(totalFaturamento * 0.60)}
+            icon="📈"
+            accent="bg-wine-50 text-wine-700"
+            change="+8%"
+            positive
+          />
+          <KpiCard
+            label="Leads Ativos"
+            value={totalLeads.toString()}
+            icon="🧲"
+            accent="bg-wine-50 text-wine-700"
+            change="+15"
+            positive
+          />
         </div>
       )}
 
@@ -887,17 +801,10 @@ export default function Dashboard({ activeTab }: { activeTab: string }) {
             </div>
           )}
 
-          {/* Grid de Desempenho por Profissional + Funil de Vendas */}
+          {/* Desempenho por Profissional — em largura total */}
           {hasPermission('canViewTeamPerformance') && (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
-              <div className="lg:col-span-2">
-                <DesempenhoProfissional onSelectVendedor={setSelectedVendedor} />
-              </div>
-              {hasPermission('canViewAllLeads') && (
-                <div className="lg:col-span-1">
-                  <FunilVendas totalLeads={totalLeads} />
-                </div>
-              )}
+            <div className="w-full mt-8">
+              <DesempenhoProfissional onSelectVendedor={setSelectedVendedor} />
             </div>
           )}
         </>
