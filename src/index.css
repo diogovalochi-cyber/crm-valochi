@@ -1,0 +1,103 @@
+/* ============================================================
+   IMPORTANTE: @import externo deve vir ANTES de qualquer regra CSS
+   Importação de fontes do Google Fonts
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;600;700;800&display=swap');
+
+@import "tailwindcss";
+
+/* ============================================================
+   Valochi Sousa — Design System Tokens
+   Paleta: Vinho/Bordô Profundo + Cinza Gelo
+   ============================================================ */
+@theme {
+  /* Cores primárias — Vinho/Bordô */
+  --color-wine-950: #2A0810;
+  --color-wine-900: #4A0E17;
+  --color-wine-800: #6B1525;
+  --color-wine-700: #8B1C33;
+  --color-wine-600: #A52040;
+  --color-wine-500: #C4264E;
+  --color-wine-400: #D95473;
+  --color-wine-300: #E8849A;
+  --color-wine-200: #F3B4C2;
+  --color-wine-100: #FAE4E9;
+  --color-wine-50:  #FDF2F4;
+
+  /* Cinza Gelo — fundos */
+  --color-ice-50:  #F7F8FA;
+  --color-ice-100: #F0F1F5;
+  --color-ice-200: #E4E6EE;
+  --color-ice-300: #CDD0DC;
+  --color-ice-400: #9EA4B8;
+  --color-ice-500: #6E758F;
+  --color-ice-600: #4B526A;
+  --color-ice-700: #343B52;
+  --color-ice-800: #232940;
+  --color-ice-900: #161B30;
+
+  /* Fontes */
+  --font-sans: 'Inter', 'Outfit', system-ui, sans-serif;
+  --font-display: 'Outfit', 'Inter', system-ui, sans-serif;
+
+  /* Radius */
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+}
+
+/* ============================================================
+   Reset e base
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  font-family: var(--font-sans);
+  background-color: var(--color-ice-50);
+  color: var(--color-ice-900);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar estilizado */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--color-ice-100); }
+::-webkit-scrollbar-thumb { background: var(--color-wine-300); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-wine-600); }
+
+/* ============================================================
+   Animações globais
+   ============================================================ */
+@keyframes loginShake {
+  0%, 100% { transform: translateX(0); }
+  15%       { transform: translateX(-8px); }
+  30%       { transform: translateX(8px); }
+  45%       { transform: translateX(-6px); }
+  60%       { transform: translateX(6px); }
+  75%       { transform: translateX(-3px); }
+  90%       { transform: translateX(3px); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
