@@ -28,12 +28,11 @@ interface NavItem {
   id: string;
   label: string;
   icon: string;
-  permissionKey?: 'canViewWeeklyAgenda';
 }
 
 const NAV_ITEMS: NavItem[] = [
   { id: 'dashboard', label: 'Dashboard', icon: ICONS.dashboard },
-  { id: 'agenda', label: 'Agendas', icon: ICONS.calendar, permissionKey: 'canViewWeeklyAgenda' },
+  { id: 'agenda', label: 'Agendas', icon: ICONS.calendar },
   { id: 'forms', label: 'Google Forms', icon: ICONS.forms },
   { id: 'analise', label: 'Análise', icon: ICONS.search },
 ];
@@ -88,9 +87,8 @@ function Sidebar({ activeItem, onNavigate, collapsed, onToggle }: {
   activeItem: string; onNavigate: (id: string) => void;
   collapsed: boolean; onToggle: () => void;
 }) {
-  const { currentUser, hasPermission, logout } = useAuth();
+  const { currentUser, logout } = useAuth();
   if (!currentUser) return null;
-  const isVisible = (item: NavItem) => !item.permissionKey || hasPermission(item.permissionKey);
 
   return (
     <aside className={`
@@ -135,15 +133,15 @@ function Sidebar({ activeItem, onNavigate, collapsed, onToggle }: {
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
-        {NAV_ITEMS.filter(isVisible).map((item) => (
+        {NAV_ITEMS.map((item) => (
           <NavButton key={item.id} item={item} active={activeItem === item.id}
             collapsed={collapsed} onClick={() => onNavigate(item.id)} />
         ))}
       </nav>
 
       {/* Perfil + Sair */}
-      <div className={`border-t border-wine-800/40 ${collapsed ? 'p-2' : 'p-3'}`}>
-        <div className={`flex items-center rounded-xl transition-colors hover:bg-white/5 cursor-pointer ${collapsed ? 'justify-center p-2' : 'gap-3 p-2'}`}>
+      <div className={`border-t border-wine-800/40 ${collapsed ? 'p-2' : 'p-3'} space-y-2`}>
+        <div className={`flex items-center rounded-xl p-2 ${collapsed ? 'justify-center' : 'gap-3'}`}>
           <div className="shrink-0 w-9 h-9 rounded-xl bg-wine-700 flex items-center justify-center text-white font-bold text-sm shadow-inner ring-1 ring-wine-600">
             {currentUser.avatar}
           </div>
@@ -155,25 +153,22 @@ function Sidebar({ activeItem, onNavigate, collapsed, onToggle }: {
               </span>
             </div>
           )}
-          {!collapsed && (
-            <button
-              onClick={logout}
-              title="Sair"
-              className="p-1.5 rounded-lg text-wine-500 hover:text-red-300 hover:bg-red-900/30 transition-all"
-            >
-              <Icon d={ICONS.logout} className="w-4 h-4" />
-            </button>
-          )}
         </div>
-        {collapsed && (
-          <button
-            onClick={logout}
-            title="Sair"
-            className="w-full flex justify-center mt-1 p-2 rounded-xl text-wine-500 hover:text-red-300 hover:bg-red-900/30 transition-all"
-          >
-            <Icon d={ICONS.logout} className="w-4 h-4" />
-          </button>
-        )}
+        
+        <button
+          onClick={logout}
+          className={`
+            w-full flex items-center rounded-xl text-wine-300 hover:text-white hover:bg-red-950/40 transition-all duration-200 cursor-pointer
+            ${collapsed ? 'justify-center p-2.5' : 'gap-2.5 px-3 py-2'}
+          `}
+        >
+          <div className="shrink-0 w-7 h-7 rounded-md flex items-center justify-center bg-white/5">
+            <Icon d={ICONS.logout} className="w-3.5 h-3.5" />
+          </div>
+          {!collapsed && (
+            <span className="text-xs font-semibold">Sair da Conta</span>
+          )}
+        </button>
       </div>
     </aside>
   );

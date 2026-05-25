@@ -11,6 +11,7 @@ export interface User {
   avatar: string;
   email: string;
   meta?: number; // meta comercial mensal (R$)
+  code?: string; // código do vendedor (ex: 093)
 }
 
 // Permissões derivadas do cargo
@@ -62,14 +63,14 @@ export const MOCK_USERS: User[] = [
   { id: '1',  name: 'Diogo',     role: 'ANALISTA',   avatar: 'DI', email: 'diogo@valochisousa.com.br' },
   { id: '2',  name: 'Carlos',    role: 'GERENTE',     avatar: 'CA', email: 'carlos@valochisousa.com.br' },
   { id: '3',  name: 'Lázaro',    role: 'SUPERVISOR',  avatar: 'LZ', email: 'lazaro@valochisousa.com.br' },
-  { id: '4',  name: 'Guilherme', role: 'VENDEDOR',    avatar: 'GU', email: 'guilherme@valochisousa.com.br', meta: 45000 },
-  { id: '5',  name: 'Natália',   role: 'VENDEDOR',    avatar: 'NA', email: 'natalia@valochisousa.com.br',  meta: 50000 },
-  { id: '6',  name: 'Keller',    role: 'VENDEDOR',    avatar: 'KE', email: 'keller@valochisousa.com.br',   meta: 40000 },
-  { id: '7',  name: 'Israel',    role: 'VENDEDOR',    avatar: 'IS', email: 'israel@valochisousa.com.br',   meta: 42000 },
-  { id: '8',  name: 'Althieres', role: 'VENDEDOR',    avatar: 'AL', email: 'althieres@valochisousa.com.br',meta: 38000 },
-  { id: '9',  name: 'Jorge',     role: 'VENDEDOR',    avatar: 'JO', email: 'jorge@valochisousa.com.br',    meta: 35000 },
-  { id: '10', name: 'Everaldo',  role: 'VENDEDOR',    avatar: 'EV', email: 'everaldo@valochisousa.com.br', meta: 40000 },
-  { id: '11', name: 'Relson',    role: 'VENDEDOR',    avatar: 'RE', email: 'relson@valochisousa.com.br',   meta: 43000 },
+  { id: '4',  name: 'Guilherme', role: 'VENDEDOR',    avatar: 'GU', email: 'guilherme@valochisousa.com.br', meta: 400000, code: '093' },
+  { id: '5',  name: 'Natália',   role: 'VENDEDOR',    avatar: 'NA', email: 'natalia@valochisousa.com.br',  meta: 200000, code: '116' },
+  { id: '6',  name: 'Keller',    role: 'VENDEDOR',    avatar: 'KE', email: 'keller@valochisousa.com.br',   meta: 120000, code: '117' },
+  { id: '7',  name: 'Israel',    role: 'VENDEDOR',    avatar: 'IS', email: 'israel@valochisousa.com.br',   meta: 200000, code: '115' },
+  { id: '8',  name: 'Althieres', role: 'VENDEDOR',    avatar: 'AL', email: 'althieres@valochisousa.com.br',meta: 80000,  code: '119' },
+  { id: '9',  name: 'Jorge',     role: 'VENDEDOR',    avatar: 'JO', email: 'jorge@valochisousa.com.br',    meta: 40000,  code: '118' },
+  { id: '10', name: 'Everaldo',  role: 'VENDEDOR',    avatar: 'EV', email: 'everaldo@valochisousa.com.br', meta: 80000,  code: '107' },
+  { id: '11', name: 'Relson',    role: 'VENDEDOR',    avatar: 'RE', email: 'relson@valochisousa.com.br',   meta: 250000, code: '094' },
 ];
 
 export const SYSTEM_PASSWORD = '123';

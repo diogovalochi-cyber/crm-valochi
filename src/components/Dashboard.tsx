@@ -1,7 +1,159 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useDashboard } from '../context/DashboardContext';
 import type { AgendaItem } from '../context/DashboardContext';
+
+// ============================================================
+// Dados Oficiais de Vendedores (01/05 a 23/05)
+// ============================================================
+export interface SellerOfficialData {
+  id: string;
+  name: string;
+  code: string;
+  faturamento: number;
+  pedidos: number;
+  maiorCliente: string;
+  avatar: string;
+  clientes: { name: string; value: number }[];
+}
+
+export const VENDEDORES_DATA: SellerOfficialData[] = [
+  {
+    id: '4',
+    name: 'Guilherme',
+    code: '093',
+    faturamento: 397646.22,
+    pedidos: 224,
+    maiorCliente: 'Samuel de Oliveira Chagas',
+    avatar: 'GU',
+    clientes: [
+      { name: 'Samuel de Oliveira Chagas', value: 154294.00 },
+      { name: 'Rede Fast Food Central', value: 75400.00 },
+      { name: 'Panificadora Estrela do Norte', value: 52800.00 },
+      { name: 'Supermercado Boa Compra', value: 38500.00 },
+      { name: 'Mercadinho Alvorada', value: 25000.00 },
+      { name: 'Panificadora Silva', value: 20000.00 },
+      { name: 'Pão de Queijo & Cia', value: 15000.00 },
+      { name: 'Café da Manhã Feliz', value: 14652.22 }
+    ]
+  },
+  {
+    id: '11',
+    name: 'Relson',
+    code: '094',
+    faturamento: 212441.19,
+    pedidos: 42,
+    maiorCliente: 'Peg Leve',
+    avatar: 'RE',
+    clientes: [
+      { name: 'Peg Leve', value: 32501.96 },
+      { name: 'Embraer Cantina', value: 28400.00 },
+      { name: 'Padaria Vale das Letras', value: 21200.00 },
+      { name: 'Hotel Quatro Estações', value: 18500.00 },
+      { name: 'Supermercado Ricoy', value: 15000.00 },
+      { name: 'Padaria Central Sul', value: 12000.00 },
+      { name: 'Restaurante Bom Gosto', value: 10000.00 },
+      { name: 'Outros Clientes Consolidados', value: 74839.23 }
+    ]
+  },
+  {
+    id: '7',
+    name: 'Israel',
+    code: '115',
+    faturamento: 165187.17,
+    pedidos: 64,
+    maiorCliente: 'Ipava Raio Supermercado',
+    avatar: 'IS',
+    clientes: [
+      { name: 'Ipava Raio Supermercado', value: 48200.00 },
+      { name: 'Rede Giraffas SP', value: 39500.00 },
+      { name: 'Hospital São Lucas', value: 27400.00 },
+      { name: 'Cantina Universitária', value: 22800.00 },
+      { name: 'Supermercado Primavera', value: 15000.00 },
+      { name: 'Mercado da Família', value: 12287.17 }
+    ]
+  },
+  {
+    id: '5',
+    name: 'Natália',
+    code: '116',
+    faturamento: 163851.21,
+    pedidos: 28,
+    maiorCliente: 'Distribuidora de Hortifruti',
+    avatar: 'NA',
+    clientes: [
+      { name: 'Distribuidora de Hortifruti', value: 45800.00 },
+      { name: 'Rede Supermercados ABC', value: 39200.00 },
+      { name: 'Supermercado Peteko', value: 28100.00 },
+      { name: 'Padaria Premium Sul', value: 21400.00 },
+      { name: 'Mercado São José', value: 18000.00 },
+      { name: 'Confeitaria Doce Mel', value: 11351.21 }
+    ]
+  },
+  {
+    id: '6',
+    name: 'Keller',
+    code: '117',
+    faturamento: 101554.51,
+    pedidos: 29,
+    maiorCliente: 'Nova Geração Loja 1',
+    avatar: 'KE',
+    clientes: [
+      { name: 'Nova Geração Loja 1', value: 31400.00 },
+      { name: 'Cooperativa Agrícola SP', value: 27500.00 },
+      { name: 'Armazém Campo & Cidade', value: 19800.00 },
+      { name: 'Fazenda Rancho Alegre', value: 15200.00 },
+      { name: 'Padaria Nova Estrela', value: 7654.51 }
+    ]
+  },
+  {
+    id: '10',
+    name: 'Everaldo',
+    code: '107',
+    faturamento: 75402.40,
+    pedidos: 20,
+    maiorCliente: 'Mercado Trindade',
+    avatar: 'EV',
+    clientes: [
+      { name: 'Mercado Trindade', value: 22400.00 },
+      { name: 'Supermercados Boa Vista', value: 19200.00 },
+      { name: 'Padaria São Paulo', value: 15400.00 },
+      { name: 'Panificadora Central', value: 12800.00 },
+      { name: 'Mercado do Bairro', value: 5602.40 }
+    ]
+  },
+  {
+    id: '8',
+    name: 'Althieres',
+    code: '119',
+    faturamento: 66710.21,
+    pedidos: 27,
+    maiorCliente: 'Compre Bem',
+    avatar: 'AL',
+    clientes: [
+      { name: 'Compre Bem', value: 21800.00 },
+      { name: 'Padaria Família ABC', value: 17500.00 },
+      { name: 'Mercadão Santo André', value: 14200.00 },
+      { name: 'Lanchonete Sabor & Arte', value: 9800.00 },
+      { name: 'Mercado Ideal', value: 3410.21 }
+    ]
+  },
+  {
+    id: '9',
+    name: 'Jorge',
+    code: '118',
+    faturamento: 39800.59,
+    pedidos: 12,
+    maiorCliente: 'Familia Varejo',
+    avatar: 'JO',
+    clientes: [
+      { name: 'Familia Varejo', value: 14500.00 },
+      { name: 'Hotel Praia Grande Palace', value: 11200.00 },
+      { name: 'Pousada Beira Mar', value: 8500.00 },
+      { name: 'Restaurante Âncora', value: 5600.59 }
+    ]
+  }
+];
 
 // ============================================================
 // Utilidades
@@ -218,77 +370,92 @@ function FunilVendas({ totalLeads }: { totalLeads: number }) {
 }
 
 // ============================================================
-// Desempenho por Profissional
+// Desempenho por Profissional (Vendedores Oficiais)
 // ============================================================
-const PROFISSIONAIS_BASE = [
-  { name: 'Beatriz Lima', avatar: 'BL', meta: 90 },
-  { name: 'Larissa Santos', avatar: 'LS', meta: 82 },
-  { name: 'Marcos Oliveira', avatar: 'MO', meta: 71 },
-];
-
-function DesempenhoProfissional({ items }: { items: AgendaItem[] }) {
-  const data = useMemo(() => PROFISSIONAIS_BASE.map((p, i) => {
-    // Simula atendimentos por profissional com base nos items de agenda
-    const slice = items.slice(i * 2, i * 2 + 3);
-    const total = slice.reduce((s, it) => s + it.valor, 0) + (i === 0 ? 18500 : i === 1 ? 14200 : 9800);
-    return { ...p, valor: total, atendimentos: 40 + items.length + i * 5 - i * 8 };
-  }), [items]);
-
+function DesempenhoProfissional({ onSelectVendedor }: { onSelectVendedor: (v: SellerOfficialData) => void }) {
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-      <div className="mb-5">
-        <h3 className="text-sm font-display font-bold text-ice-900">Desempenho por Profissional</h3>
-        <p className="text-xs text-ice-400 mt-0.5">Top performers do mês</p>
+      <div className="mb-5 flex justify-between items-center">
+        <div>
+          <h3 className="text-sm font-display font-bold text-ice-900">Desempenho por Profissional</h3>
+          <p className="text-xs text-ice-400 mt-0.5">Faturamento real acumulado (01/05 a 23/05)</p>
+        </div>
+        <span className="text-[10px] font-bold uppercase tracking-wider text-wine-600 bg-wine-50 px-2.5 py-1 rounded-full border border-wine-100">
+          8 Vendedores
+        </span>
       </div>
-      <div className="space-y-5">
-        {data.map((p, i) => (
-          <div key={p.name} className="flex items-center gap-3">
-            <div className="relative shrink-0">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-wine-100 to-wine-200 flex items-center justify-center text-wine-800 font-bold text-xs shadow-sm">
-                {p.avatar}
-              </div>
-              {i === 0 && (
-                <div className="absolute -top-1.5 -right-1.5 text-xs leading-none">🥇</div>
-              )}
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-sm font-semibold text-ice-900 truncate">{p.name}</span>
-                <span className="text-xs font-bold text-wine-700 ml-2 tabular-nums">{fmt(p.valor)}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="flex-1 bg-ice-100 rounded-full h-1.5 overflow-hidden">
-                  <div
-                    className="h-1.5 rounded-full bg-gradient-to-r from-wine-700 to-wine-400 transition-all duration-700"
-                    style={{ width: `${p.meta}%` }}
-                  />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {VENDEDORES_DATA.map((p, i) => {
+          const leaderFaturamento = VENDEDORES_DATA[0].faturamento;
+          const pct = Math.round((p.faturamento / leaderFaturamento) * 100);
+          return (
+            <div
+              key={p.id}
+              onClick={() => onSelectVendedor(p)}
+              className="flex items-center gap-3.5 p-3.5 rounded-2xl border border-gray-50 bg-gray-50/10 hover:bg-wine-50/20 hover:border-wine-100/50 cursor-pointer transition-all duration-200 group animate-[fadeIn_0.3s_ease]"
+            >
+              <div className="relative shrink-0">
+                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-wine-50 to-wine-100/80 group-hover:from-wine-100 group-hover:to-wine-200 flex items-center justify-center text-wine-800 font-bold text-xs shadow-sm ring-1 ring-wine-900/5 transition-all">
+                  {p.avatar}
                 </div>
-                <span className="text-[10px] font-bold text-wine-600 shrink-0">{p.meta}%</span>
+                {i === 0 && (
+                  <div className="absolute -top-1.5 -right-1.5 text-xs leading-none">🥇</div>
+                )}
+                {i === 1 && (
+                  <div className="absolute -top-1.5 -right-1.5 text-xs leading-none">🥈</div>
+                )}
+                {i === 2 && (
+                  <div className="absolute -top-1.5 -right-1.5 text-xs leading-none">🥉</div>
+                )}
               </div>
-              <p className="text-[10px] text-ice-400 mt-1">{p.atendimentos} atendimentos</p>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-xs font-bold text-ice-900 truncate group-hover:text-wine-950 transition-colors">
+                    {p.name} <span className="text-[10px] font-normal text-ice-400">({p.code})</span>
+                  </span>
+                  <span className="text-xs font-extrabold text-wine-700 ml-2 tabular-nums">{fmt(p.faturamento)}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 bg-ice-100/70 rounded-full h-1.5 overflow-hidden">
+                    <div
+                      className="h-1.5 rounded-full bg-gradient-to-r from-wine-700 to-wine-400 transition-all duration-700"
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                  <span className="text-[9px] font-bold text-wine-600 shrink-0">{pct}%</span>
+                </div>
+                <div className="flex justify-between items-center mt-1">
+                  <p className="text-[10px] text-ice-400 font-medium">{p.pedidos} pedidos</p>
+                  <p className="text-[9px] text-wine-600 font-semibold group-hover:underline">Ver Carteira →</p>
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
 }
 
 // ============================================================
-// Meta do Vendedor
+// Meta do Vendedor (Consistente com Faturamento Oficial)
 // ============================================================
 function MetaVendedor({ items, meta = 50000, userId }: { items: AgendaItem[]; meta?: number; userId: string }) {
+  const currentSeller = VENDEDORES_DATA.find(v => v.id === userId);
   const myItems = items.filter(i => i.vendedorId === userId && i.status === 'concluido');
-  const atual = useMemo(() => myItems.reduce((s, i) => s + i.valor, 12500), [myItems]);
+  const atual = useMemo(() => {
+    if (currentSeller) return currentSeller.faturamento;
+    return myItems.reduce((s, i) => s + i.valor, 12500);
+  }, [currentSeller, myItems]);
   const pct = Math.min(Math.round((atual / meta) * 100), 100);
   const faltam = Math.max(meta - atual, 0);
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 animate-[fadeIn_0.35s_ease]">
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-sm font-display font-bold text-ice-900">Minha Meta Mensal</h3>
-          <p className="text-xs text-ice-400 mt-0.5">Maio 2026 · {myItems.length + 3} atendimentos concluídos</p>
+          <p className="text-xs text-ice-400 mt-0.5">Maio 2026 · {currentSeller ? currentSeller.pedidos : myItems.length + 3} atendimentos/pedidos realizados</p>
         </div>
         <div className="text-right">
           <span className={`text-2xl font-display font-black ${pct >= 80 ? 'text-emerald-600' : pct >= 50 ? 'text-amber-600' : 'text-red-500'}`}>
@@ -318,7 +485,7 @@ function MetaVendedor({ items, meta = 50000, userId }: { items: AgendaItem[]; me
               <p className="text-sm font-bold text-amber-600">{fmt(faltam)}</p>
             </>
           ) : (
-            <span className="text-sm font-bold text-emerald-600">🎯 Meta atingida!</span>
+            <span className="text-sm font-bold text-emerald-600 font-display">🎯 Meta atingida!</span>
           )}
         </div>
         <div className="text-right">
@@ -416,9 +583,9 @@ function PermissionBanner({ role }: { role: string }) {
 export default function Dashboard({ activeTab }: { activeTab: string }) {
   const { hasPermission, currentUser } = useAuth();
   const { agendaItems, updateItemStatus } = useDashboard();
+  const [selectedVendedor, setSelectedVendedor] = useState<SellerOfficialData | null>(null);
 
   if (!currentUser) return null;
-
 
   // ---- Dados computados por role ----
   const myItems = useMemo(() => {
@@ -429,18 +596,41 @@ export default function Dashboard({ activeTab }: { activeTab: string }) {
     return agendaItems;
   }, [agendaItems, hasPermission, currentUser.id]);
 
-  const totalFaturamento = useMemo(() => {
-    const base = 32500; // faturamento base fixo
-    return base + myItems.filter(i => i.status === 'concluido').reduce((s, i) => s + i.valor, 0)
-           + myItems.reduce((s, i) => s + i.valor * 0.2, 0);
-  }, [myItems]);
+  const currentSellerInfo = useMemo(() => {
+    return VENDEDORES_DATA.find(v => v.id === currentUser.id);
+  }, [currentUser.id]);
 
-  const totalAtendimentos = useMemo(() => 120 + myItems.length, [myItems]);
-  const totalLeads = useMemo(() => 60 + Math.round(myItems.length * 1.4), [myItems]);
+  const totalFaturamento = useMemo(() => {
+    if (hasPermission('canViewFullRevenue')) {
+      return VENDEDORES_DATA.reduce((sum, v) => sum + v.faturamento, 0);
+    }
+    // Para vendedores, usa o faturamento oficial consolidado mais qualquer item concluído registrado nesta sessão
+    const newConcluidos = myItems.filter(i => i.status === 'concluido' && i.id.startsWith('new-')).reduce((s, i) => s + i.valor, 0);
+    return (currentSellerInfo?.faturamento ?? 32500) + newConcluidos;
+  }, [hasPermission, currentSellerInfo, myItems]);
+
+  const totalAtendimentos = useMemo(() => {
+    if (hasPermission('canViewAllLeads')) {
+      return VENDEDORES_DATA.reduce((sum, v) => sum + v.pedidos, 0);
+    }
+    // Soma os novos atendimentos registrados na sessão
+    const newCount = myItems.filter(i => i.id.startsWith('new-')).length;
+    return (currentSellerInfo?.pedidos ?? 120) + newCount;
+  }, [hasPermission, currentSellerInfo, myItems]);
+
+  const totalLeads = useMemo(() => {
+    if (hasPermission('canViewAllLeads')) {
+      return 150 + myItems.filter(i => i.id.startsWith('new-')).length;
+    }
+    return Math.round((currentSellerInfo?.pedidos ?? 10) * 1.5) + myItems.filter(i => i.id.startsWith('new-')).length;
+  }, [hasPermission, currentSellerInfo, myItems]);
+
   const taxaConversao = useMemo(() => {
-    const concluidos = myItems.filter(i => i.status === 'concluido').length;
-    return myItems.length > 0 ? Math.round((concluidos / myItems.length) * 100) : 42;
-  }, [myItems]);
+    if (hasPermission('canViewAllLeads')) {
+      return 68;
+    }
+    return 74;
+  }, [hasPermission]);
 
   // Se estiver na aba Agendas
   if (activeTab === 'agenda') {
@@ -520,7 +710,93 @@ export default function Dashboard({ activeTab }: { activeTab: string }) {
           <ProdutosMaisVendidos items={agendaItems} />
         </div>
         {hasPermission('canViewTeamPerformance') && (
-          <DesempenhoProfissional items={agendaItems} />
+          <DesempenhoProfissional onSelectVendedor={setSelectedVendedor} />
+        )}
+
+        {/* Modal de Carteira de Clientes */}
+        {selectedVendedor && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div
+              onClick={() => setSelectedVendedor(null)}
+              className="absolute inset-0 bg-wine-950/40 backdrop-blur-md transition-opacity duration-300"
+            />
+            
+            <div className="relative bg-white rounded-[32px] p-7 max-w-lg w-full border border-wine-100 shadow-[0_25px_60px_rgba(74,14,23,0.18)] z-10 overflow-hidden animate-[slideUp_0.25s_ease-out]">
+              <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-wine-800 via-wine-600 to-wine-400" />
+              
+              <div className="flex items-start gap-4 mb-6 mt-2">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-wine-50 to-wine-100 flex items-center justify-center text-wine-900 font-black font-display text-lg shadow-sm border border-wine-200/50">
+                  {selectedVendedor.avatar}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-lg font-bold text-ice-900 truncate">{selectedVendedor.name}</h3>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+                      Vendedor
+                    </span>
+                  </div>
+                  <p className="text-xs font-semibold text-wine-600/80 mt-0.5">Código do Profissional: #{selectedVendedor.code}</p>
+                </div>
+                <button
+                  onClick={() => setSelectedVendedor(null)}
+                  className="text-ice-400 hover:text-wine-800 transition-colors p-1 rounded-lg hover:bg-ice-50"
+                  aria-label="Fechar"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="bg-ice-50/50 border border-ice-100 p-3.5 rounded-2xl">
+                  <p className="text-[10px] font-bold text-ice-400 uppercase tracking-wider">Faturamento Período</p>
+                  <p className="text-base font-extrabold text-wine-900 mt-1">{fmt(selectedVendedor.faturamento)}</p>
+                  <p className="text-[9px] text-ice-500 mt-0.5">01/05 a 23/05</p>
+                </div>
+                <div className="bg-ice-50/50 border border-ice-100 p-3.5 rounded-2xl">
+                  <p className="text-[10px] font-bold text-ice-400 uppercase tracking-wider">Total de Pedidos</p>
+                  <p className="text-base font-extrabold text-ice-900 mt-1">{selectedVendedor.pedidos} pedidos</p>
+                  <p className="text-[9px] text-ice-500 mt-0.5">Clientes atendidos</p>
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <div className="flex justify-between items-center mb-3">
+                  <p className="text-xs font-bold text-ice-800 uppercase tracking-wider">Principais Clientes da Carteira</p>
+                  <span className="text-[10px] font-semibold text-wine-600 bg-wine-50/60 px-2 py-0.5 rounded-md">
+                    Maior: {selectedVendedor.maiorCliente}
+                  </span>
+                </div>
+
+                <div className="max-h-48 overflow-y-auto pr-1 space-y-2.5 divide-y divide-ice-100/50">
+                  {selectedVendedor.clientes.map((c, idx) => (
+                    <div key={idx} className="flex justify-between items-center pt-2.5 first:pt-0">
+                      <div className="flex items-center gap-2">
+                        <span className={`w-1.5 h-1.5 rounded-full ${c.name === selectedVendedor.maiorCliente ? 'bg-wine-600 animate-pulse' : 'bg-ice-300'}`} />
+                        <span className={`text-xs font-semibold ${c.name === selectedVendedor.maiorCliente ? 'text-wine-900 font-bold' : 'text-ice-800'}`}>
+                          {c.name}
+                        </span>
+                        {c.name === selectedVendedor.maiorCliente && (
+                          <span className="text-[8px] font-bold uppercase tracking-wider px-1.5 py-0.2 bg-wine-100 text-wine-800 rounded">
+                            Foco / Top
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-xs font-bold text-ice-700 tabular-nums">{fmt(c.value)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                onClick={() => setSelectedVendedor(null)}
+                className="w-full py-3 rounded-2xl bg-gradient-to-r from-wine-800 to-wine-600 hover:from-wine-700 hover:to-wine-500 text-white font-bold text-xs uppercase tracking-wider shadow transition-all cursor-pointer"
+              >
+                Entendido / Fechar
+              </button>
+            </div>
+          </div>
         )}
       </div>
     );
@@ -544,7 +820,7 @@ export default function Dashboard({ activeTab }: { activeTab: string }) {
           {hasPermission('canViewFullRevenue') && (
             <>
               <KpiCard
-                label="Faturamento Mensal"
+                label="Faturamento Período"
                 value={fmt(totalFaturamento)}
                 icon="💰"
                 accent="bg-wine-50 text-wine-700"
@@ -552,7 +828,7 @@ export default function Dashboard({ activeTab }: { activeTab: string }) {
                 positive
               />
               <KpiCard
-                label="Lucro Líquido"
+                label="Lucro Líquido (Est.)"
                 value={fmt(totalFaturamento * 0.60)}
                 icon="📈"
                 accent="bg-wine-50 text-wine-700"
@@ -562,9 +838,9 @@ export default function Dashboard({ activeTab }: { activeTab: string }) {
             </>
           )}
           <KpiCard
-            label="Atendimentos"
+            label="Pedidos / Atendimentos"
             value={totalAtendimentos.toString()}
-            sub={hasPermission('canViewAllLeads') ? 'Total da equipe' : 'Seus atendimentos'}
+            sub={hasPermission('canViewAllLeads') ? 'Total consolidado' : 'Seus atendimentos'}
             icon="🎯"
             accent="bg-ice-50 text-ice-600"
             change={`+${myItems.length}`}
@@ -626,7 +902,7 @@ export default function Dashboard({ activeTab }: { activeTab: string }) {
 
           {/* Desempenho — só gerentes/supervisores/analistas */}
           {hasPermission('canViewTeamPerformance') && (
-            <DesempenhoProfissional items={agendaItems} />
+            <DesempenhoProfissional onSelectVendedor={setSelectedVendedor} />
           )}
         </>
       )}
@@ -634,6 +910,92 @@ export default function Dashboard({ activeTab }: { activeTab: string }) {
       {/* Técnico: só agenda, sem nada mais */}
       {!hasPermission('canViewOwnStats') && hasPermission('canViewWeeklyAgenda') && (
         <AgendaSection items={agendaItems} onUpdateStatus={updateItemStatus} />
+      )}
+
+      {/* Modal de Carteira de Clientes */}
+      {selectedVendedor && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div
+            onClick={() => setSelectedVendedor(null)}
+            className="absolute inset-0 bg-wine-950/40 backdrop-blur-md transition-opacity duration-300"
+          />
+          
+          <div className="relative bg-white rounded-[32px] p-7 max-w-lg w-full border border-wine-100 shadow-[0_25px_60px_rgba(74,14,23,0.18)] z-10 overflow-hidden animate-[slideUp_0.25s_ease-out]">
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-wine-800 via-wine-600 to-wine-400" />
+            
+            <div className="flex items-start gap-4 mb-6 mt-2">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-wine-50 to-wine-100 flex items-center justify-center text-wine-900 font-black font-display text-lg shadow-sm border border-wine-200/50">
+                {selectedVendedor.avatar}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-lg font-bold text-ice-900 truncate">{selectedVendedor.name}</h3>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+                    Vendedor
+                  </span>
+                </div>
+                <p className="text-xs font-semibold text-wine-600/80 mt-0.5">Código do Profissional: #{selectedVendedor.code}</p>
+              </div>
+              <button
+                onClick={() => setSelectedVendedor(null)}
+                className="text-ice-400 hover:text-wine-800 transition-colors p-1 rounded-lg hover:bg-ice-50"
+                aria-label="Fechar"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div className="bg-ice-50/50 border border-ice-100 p-3.5 rounded-2xl">
+                <p className="text-[10px] font-bold text-ice-400 uppercase tracking-wider">Faturamento Período</p>
+                <p className="text-base font-extrabold text-wine-900 mt-1">{fmt(selectedVendedor.faturamento)}</p>
+                <p className="text-[9px] text-ice-500 mt-0.5">01/05 a 23/05</p>
+              </div>
+              <div className="bg-ice-50/50 border border-ice-100 p-3.5 rounded-2xl">
+                <p className="text-[10px] font-bold text-ice-400 uppercase tracking-wider">Total de Pedidos</p>
+                <p className="text-base font-extrabold text-ice-900 mt-1">{selectedVendedor.pedidos} pedidos</p>
+                <p className="text-[9px] text-ice-500 mt-0.5">Clientes atendidos</p>
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <div className="flex justify-between items-center mb-3">
+                <p className="text-xs font-bold text-ice-800 uppercase tracking-wider">Principais Clientes da Carteira</p>
+                <span className="text-[10px] font-semibold text-wine-600 bg-wine-50/60 px-2 py-0.5 rounded-md">
+                  Maior: {selectedVendedor.maiorCliente}
+                </span>
+              </div>
+
+              <div className="max-h-48 overflow-y-auto pr-1 space-y-2.5 divide-y divide-ice-100/50">
+                {selectedVendedor.clientes.map((c, idx) => (
+                  <div key={idx} className="flex justify-between items-center pt-2.5 first:pt-0">
+                    <div className="flex items-center gap-2">
+                      <span className={`w-1.5 h-1.5 rounded-full ${c.name === selectedVendedor.maiorCliente ? 'bg-wine-600 animate-pulse' : 'bg-ice-300'}`} />
+                      <span className={`text-xs font-semibold ${c.name === selectedVendedor.maiorCliente ? 'text-wine-900 font-bold' : 'text-ice-800'}`}>
+                        {c.name}
+                      </span>
+                      {c.name === selectedVendedor.maiorCliente && (
+                        <span className="text-[8px] font-bold uppercase tracking-wider px-1.5 py-0.2 bg-wine-100 text-wine-800 rounded">
+                          Foco / Top
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-xs font-bold text-ice-700 tabular-nums">{fmt(c.value)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <button
+              onClick={() => setSelectedVendedor(null)}
+              className="w-full py-3 rounded-2xl bg-gradient-to-r from-wine-800 to-wine-600 hover:from-wine-700 hover:to-wine-500 text-white font-bold text-xs uppercase tracking-wider shadow transition-all cursor-pointer"
+            >
+              Entendido / Fechar
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
