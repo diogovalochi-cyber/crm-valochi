@@ -588,12 +588,12 @@ body.mode-mobile .mini-kpi-grid{grid-template-columns:1fr 1fr}
 body.mode-mobile .kpi-value{font-size:18px}
 
 /* ─── VENDOR COLORS ─── */
-.c-felipe{color:#FFD93D} .c-guilherme{color:#00D4AA} .c-relson{color:#90CAF9}
-.c-israel{color:#C77DFF} .c-everaldo{color:#FF9A56} .c-natalia{color:#FF6B6B}
-.c-keller{color:#80DEEA} .c-alex{color:rgba(255,255,255,.6)}
-.bg-felipe{background:#FFD93D} .bg-guilherme{background:#00D4AA} .bg-relson{background:#90CAF9}
-.bg-israel{background:#C77DFF} .bg-everaldo{background:#FF9A56} .bg-natalia{background:#FF6B6B}
-.bg-keller{background:#80DEEA} .bg-alex{background:rgba(255,255,255,.35)}
+.c-guilherme{color:#00D4AA} .c-relson{color:#90CAF9} .c-everaldo{color:#FF9A56}
+.c-israel{color:#C77DFF} .c-natalia{color:#FF6B6B} .c-keller{color:#80DEEA}
+.c-althieres{color:#FFD93D} .c-jorge{color:rgba(255,255,255,.75)}
+.bg-guilherme{background:#00D4AA} .bg-relson{background:#90CAF9} .bg-everaldo{background:#FF9A56}
+.bg-israel{background:#C77DFF} .bg-natalia{background:#FF6B6B} .bg-keller{background:#80DEEA}
+.bg-althieres{background:#FFD93D} .bg-jorge{background:rgba(255,255,255,.35)}
 
 /* spacer */
 .mt-12{margin-top:12px}.mt-16{margin-top:16px}.mt-8{margin-top:8px}
@@ -601,6 +601,17 @@ body.mode-mobile .kpi-value{font-size:18px}
 .gap-12{gap:12px}.gap-8{gap:8px}
 .flex{display:flex}.items-center{align-items:center}.justify-between{justify-content:space-between}
 .flex-1{flex:1}.w-full{width:100%}.text-right{text-align:right}
+/* Vendor colors extra */
+.c-joao{color:#A8EDEA} .bg-joao{background:#A8EDEA}
+/* Mês toggle btn */
+.mes-toggle-btn{background:transparent;border:none;color:rgba(255,255,255,.5);font-family:Poppins,sans-serif;font-size:12px;font-weight:600;padding:7px 14px;border-radius:8px;cursor:pointer;transition:.2s}
+.mes-toggle-btn.active{background:rgba(255,255,255,.15);color:#fff}
+.mes-toggle-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+/* Carteira table */
+#carteira-table-wrap table{width:100%}
+#carteira-table-wrap tr:hover td{background:rgba(255,255,255,.04)}
+#carteira-table-wrap td.carteira-bar{width:100px}
+.carteira-bar-inner{height:5px;border-radius:3px;transition:.4s}
 </style>
 </head>
 <body class="mode-desktop">
@@ -698,9 +709,9 @@ body.mode-mobile .kpi-value{font-size:18px}
   <div class="topbar-logo"><span></span><span></span><span></span><span></span></div>
   <div class="topbar-brand"><h1>Valochi Sousa</h1><p>CRM Comercial</p></div>
   <div class="topbar-stats" id="topbar-stats">
-    <div class="topbar-stat">Total Abr <strong>R$1,67M</strong></div>
-    <div class="topbar-stat"><span class="up">▲+3,97%</span> vs Março</div>
-    <div class="topbar-stat"><strong>7</strong> vendedores</div>
+    <div class="topbar-stat">Total Abr <strong id="topbar-total">R$1,11M</strong></div>
+    <div class="topbar-stat"><span id="topbar-var" class="up">▲+4,6%</span> vs Março</div>
+    <div class="topbar-stat"><strong id="topbar-count">6</strong> vendedores ativos</div>
   </div>
   <div class="topbar-toggles">
     <button class="btn-toggle" onclick="setMode('mobile')" id="btn-mobile">📱 Mobile</button>
@@ -798,31 +809,34 @@ body.mode-mobile .kpi-value{font-size:18px}
     </div>
   </div>
 
+  <!-- Banner pessoal para vendedores (injetado via JS após login) -->
+  <div id="vendor-personal-banner" style="display:none;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:16px 20px;margin-bottom:16px;flex-wrap:wrap;gap:12px;align-items:center"></div>
+
   <!-- KPI Cards -->
   <div class="kpi-grid mb-16">
     <div class="kpi-card kpi-gold">
       <div class="kpi-label">Total Abril</div>
-      <div class="kpi-value" style="color:var(--gold)">R$1,67M</div>
-      <div class="kpi-sub">R$ 1.669.419,80</div>
-      <div class="kpi-change"><span class="badge-up">▲ +3,97%</span> vs Março</div>
+      <div class="kpi-value" style="color:var(--gold)" id="kpi-total-val">R$1,11M</div>
+      <div class="kpi-sub" id="kpi-total-sub">R$ 1.113.506,46</div>
+      <div class="kpi-change" id="kpi-total-change"><span class="badge-up">▲ +4,6%</span> vs Março</div>
     </div>
     <div class="kpi-card kpi-mint">
       <div class="kpi-label">Líder do Mês</div>
-      <div class="kpi-value" style="color:var(--mint)">Felipe</div>
-      <div class="kpi-sub">R$469.564 · 55 clientes</div>
-      <div class="kpi-change"><span class="badge-up">▲ +2,7%</span> vs Março</div>
+      <div class="kpi-value" style="color:var(--mint)" id="kpi-lider-val">Guilherme</div>
+      <div class="kpi-sub" id="kpi-lider-sub">R$440.861 · 40 clientes</div>
+      <div class="kpi-change" id="kpi-lider-change"><span class="badge-up">▲ +6,7%</span> vs Março</div>
     </div>
     <div class="kpi-card kpi-sky">
       <div class="kpi-label">Pedidos Abril</div>
-      <div class="kpi-value" style="color:var(--sky)">1.053</div>
-      <div class="kpi-sub">247 clientes ativos</div>
+      <div class="kpi-value" style="color:var(--sky)" id="kpi-pedidos-val">389</div>
+      <div class="kpi-sub" id="kpi-pedidos-sub">179 clientes ativos</div>
       <div class="kpi-change" style="color:var(--text-dim)">Base consolidada</div>
     </div>
     <div class="kpi-card kpi-peach">
-      <div class="kpi-label">⚠ Base sem dono</div>
-      <div class="kpi-value" style="color:var(--peach)">Alex</div>
-      <div class="kpi-sub">R$ 90.688 · cód.113</div>
-      <div class="kpi-change" style="color:var(--coral)">Definir responsável</div>
+      <div class="kpi-label">Ticket Médio</div>
+      <div class="kpi-value" style="color:var(--peach)" id="kpi-ticket-val">R$2,86k</div>
+      <div class="kpi-sub" id="kpi-ticket-sub">por pedido · Abril</div>
+      <div class="kpi-change"><span class="badge-up">▲ Mês ativo</span></div>
     </div>
   </div>
 
@@ -836,7 +850,7 @@ body.mode-mobile .kpi-value{font-size:18px}
       <div id="ranking-list"></div>
       <div class="rank-total">
         <span class="rank-total-label">Total Geral</span>
-        <span class="rank-total-val">R$ 1.669.419,80</span>
+        <span class="rank-total-val" id="rank-total-dynamic">R$ 1.113.506,46</span>
       </div>
     </div>
     <!-- Right column -->
@@ -844,9 +858,9 @@ body.mode-mobile .kpi-value{font-size:18px}
       <!-- Alertas -->
       <div class="card">
         <div class="card-header"><span class="card-title">Alertas</span></div>
-        <div class="alert-item"><div class="alert-dot urg"></div><div class="alert-text"><strong>Base Alex — R$ 90.688</strong> sem responsável definido</div></div>
         <div class="alert-item"><div class="alert-dot warn"></div><div class="alert-text"><strong>Café Dia das Mães</strong> — Juan · Matheus · Marcelo · 08–09 Mai</div></div>
-        <div class="alert-item"><div class="alert-dot ok"></div><div class="alert-text"><strong>Israel</strong> — maior crescimento M/M · <span class="up">+20,1%</span></div></div>
+        <div class="alert-item"><div class="alert-dot ok"></div><div class="alert-text"><strong>Natália</strong> — maior crescimento M/M · <span class="up">+23,5%</span></div></div>
+        <div class="alert-item"><div class="alert-dot ok" style="background:var(--gold)"></div><div class="alert-text"><strong>Althieres e Jorge</strong> — <span style="color:var(--gold)">★ Novos na equipe</span> · Ingresso Mai/2026</div></div>
         <div class="alert-item"><div class="alert-dot info"></div><div class="alert-text"><strong>Relson</strong> — única queda · <span class="dn">-6,1%</span> vs Março</div></div>
       </div>
       <!-- Agenda da semana -->
@@ -930,7 +944,7 @@ body.mode-mobile .kpi-value{font-size:18px}
   <!-- Filter pills -->
   <div class="pill-row" id="agenda-pills">
     <div class="pill active" onclick="filterAgenda('todos',this)">Todos</div>
-    <div class="pill" onclick="filterAgenda('Juan',this)" style="">Juan</div>
+    <div class="pill" onclick="filterAgenda('Juan',this)">Juan</div>
     <div class="pill" onclick="filterAgenda('Rogério',this)">Rogério</div>
     <div class="pill" onclick="filterAgenda('Matheus',this)">Matheus</div>
     <div class="pill" onclick="filterAgenda('Marcelo',this)">Marcelo</div>
@@ -947,14 +961,15 @@ body.mode-mobile .kpi-value{font-size:18px}
   <div class="section-header">
     <div>
       <div class="section-title">Análise Comercial</div>
-      <div class="section-sub">Comparativo Março vs Abril 2026</div>
+      <div class="section-sub" id="analise-section-sub">Comparativo Março vs Abril 2026</div>
     </div>
   </div>
 
-  <div class="subtab-row">
+  <div class="subtab-row" id="analise-subtab-row">
     <button class="subtab active" onclick="showSubtab('visao',this)">Visão Geral</button>
     <button class="subtab" onclick="showSubtab('comparativo',this)">Comparativo</button>
     <button class="subtab" onclick="showSubtab('porvendedor',this)">Por Vendedor</button>
+    <button class="subtab" onclick="showSubtab('carteira',this)">📂 Carteira</button>
   </div>
 
   <!-- SUB: Visão Geral -->
@@ -1008,7 +1023,31 @@ body.mode-mobile .kpi-value{font-size:18px}
     </div>
   </div>
 
-  <!-- SUB: Por Vendedor -->
+  <!-- SUB: Carteira de Clientes -->
+  <div id="subtab-carteira" style="display:none">
+    <div class="card" style="padding:20px">
+      <!-- Controles -->
+      <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:20px">
+        <div style="display:flex;gap:4px;background:rgba(0,0,0,.2);border-radius:10px;padding:4px">
+          <button id="mes-btn-abril" class="mes-toggle-btn active" onclick="setMes('abril',this)">📅 Abril 2026</button>
+          <button id="mes-btn-maio" class="mes-toggle-btn" onclick="setMes('maio',this)">📅 Maio 2026</button>
+        </div>
+        <select id="carteira-vend-select" class="fi" style="flex:1;min-width:160px;max-width:260px" onchange="renderCarteira()">
+          <option value="">Selecione um vendedor...</option>
+        </select>
+        <input id="carteira-search" class="fi" type="text" placeholder="🔍 Buscar cliente..." style="flex:1;min-width:140px;max-width:260px" oninput="renderCarteira()">
+      </div>
+      <!-- Tabela -->
+      <div id="carteira-table-wrap" style="overflow-x:auto">
+        <div style="text-align:center;padding:40px;color:rgba(255,255,255,.3);font-size:13px">⊕ Selecione um vendedor para visualizar a carteira</div>
+      </div>
+      <!-- Rodapé -->
+      <div id="carteira-footer" style="display:none;margin-top:12px;padding:12px 16px;background:rgba(0,0,0,.2);border-radius:10px;display:none;justify-content:space-between;align-items:center">
+        <span id="carteira-footer-count" style="font-size:12px;color:rgba(255,255,255,.5)"></span>
+        <span id="carteira-footer-total" style="font-size:15px;font-weight:900;color:var(--gold)"></span>
+      </div>
+    </div>
+  </div>
   <div id="subtab-porvendedor" style="display:none">
     <div class="pill-row" id="vendor-pills"></div>
     <div style="display:grid;gap:16px" id="vendor-detail-grid">
@@ -1069,7 +1108,7 @@ body.mode-mobile .kpi-value{font-size:18px}
   <!-- Prospecção -->
   <div id="reg-prospeccao" style="display:none;max-width:600px">
     <div class="card">
-      <div class="grid-2 gap-12"><div class="form-group"><label class="fl">Vendedor</label><select class="fi"><option value="">Selecione...</option><option>Felipe</option><option>Guilherme</option><option>Relson</option><option>Israel</option><option>Everaldo</option><option>Natália</option><option>Keller</option></select></div><div class="form-group"><label class="fl">Mês</label><input class="fi" type="text" placeholder="Ex: Maio 2026"></div></div>
+      <div class="grid-2 gap-12"><div class="form-group"><label class="fl">Vendedor</label><select class="fi"><option value="">Selecione...</option><option>Guilherme</option><option>Relson</option><option>Israel</option><option>Everaldo</option><option>Natália</option><option>Keller</option><option>Althieres</option><option>Jorge</option><option>João</option></select></div><div class="form-group"><label class="fl">Mês</label><input class="fi" type="text" placeholder="Ex: Maio 2026"></div></div>
       <div class="form-group"><label class="fl">Razão Social</label><input class="fi" type="text" placeholder="Nome do estabelecimento"></div>
       <div class="form-group"><label class="fl">Endereço</label><input class="fi" type="text" placeholder="Endereço completo"></div>
       <div class="grid-2 gap-12"><div class="form-group"><label class="fl">Responsável</label><input class="fi" type="text" placeholder="Nome do contato"></div><div class="form-group"><label class="fl">Telefone</label><input class="fi" type="tel" placeholder="(11) 99999-0000"></div></div>
@@ -1192,6 +1231,7 @@ body.mode-mobile .kpi-value{font-size:18px}
 </div><!-- /main -->
 
 <script>
+let CRM_MES = 'abril'; // 'abril' | 'maio' — declarado aqui para estar acessível por todas as funções
 /* ─────────────────────────────────────────
    DATA
 ───────────────────────────────────────── */
@@ -1204,7 +1244,67 @@ const VENDEDORES = [
   { name:'Keller',    av:'KE', color:'#80DEEA', abr: 73275.56, mar: 61898.09, cli:26, ped: 35, cod:'117' },
   { name:'Althieres', av:'AL', color:'#FFD93D', abr:      0.00, mar:      0.00, cli: 0, ped:  0, cod:'119', newHire:true },
   { name:'Jorge',     av:'JO', color:'rgba(255,255,255,.75)', abr: 0.00, mar: 0.00, cli: 0, ped: 0, cod:'118', newHire:true },
+  { name:'João',      av:'JO2',color:'#A8EDEA', abr:      0.00, mar:      0.00, cli: 0, ped:  0, cod:'120', newHire:true },
 ];
+
+/* ─────────────────────────────────────────
+   renderKPIs (definida após VENDEDORES mas referencia VENDEDORES_MAIO via função = hoisted OK)
+───────────────────────────────────────── */
+function renderKPIs(){
+  const isMaio=CRM_MES==='maio';
+  const $=id=>document.getElementById(id);
+  const cls=v=>v>=0?'badge-up':'badge-dn';
+  const arrow=v=>v>=0?'▲ +':'▼ ';
+
+  // Fonte de dados do mês
+  const src = isMaio
+    ? VENDEDORES_MAIO.map(v=>({...v, abr:v.total, mar:VENDEDORES.find(x=>x.cod===v.cod)?.abr||0}))
+    : VENDEDORES;
+  const active=src.filter(v=>!v.newHire);
+  const totalAbr=src.reduce((s,v)=>s+v.abr,0);
+  const totalMar=src.reduce((s,v)=>s+v.mar,0);
+  const totalPed=src.reduce((s,v)=>s+(v.ped||0),0);
+  const totalCli=src.reduce((s,v)=>s+(v.cli||0),0);
+  const lider=[...active].sort((a,b)=>b.abr-a.abr)[0];
+  const maiorAlta=active.length?active.reduce((b,v)=>{const p=v.mar>0?(v.abr-v.mar)/v.mar:0;const bp=b.mar>0?(b.abr-b.mar)/b.mar:0;return p>bp?v:b;},active[0]):null;
+  const maiorQueda=active.length?active.reduce((w,v)=>{const p=v.mar>0?(v.abr-v.mar)/v.mar:0;const wp=w.mar>0?(w.abr-w.mar)/w.mar:0;return p<wp?v:w;},active[0]):null;
+  const varPct=totalMar>0?((totalAbr-totalMar)/totalMar*100):0;
+  const ticketMedio=totalPed>0?(totalAbr/totalPed):0;
+  const liderVar=lider&&lider.mar>0?((lider.abr-lider.mar)/lider.mar*100):0;
+  const altaVar=maiorAlta&&maiorAlta.mar>0?((maiorAlta.abr-maiorAlta.mar)/maiorAlta.mar*100):0;
+  const quedaVar=maiorQueda&&maiorQueda.mar>0?((maiorQueda.abr-maiorQueda.mar)/maiorQueda.mar*100):0;
+  const mesLabel=isMaio?'vs Abril':'vs Março';
+  const mesTitle=isMaio?'Maio':'Abril';
+
+  // Dashboard KPIs
+  if($('kpi-total-val'))  $('kpi-total-val').textContent=fK(totalAbr);
+  if($('kpi-total-sub'))  $('kpi-total-sub').textContent=fBRL(totalAbr);
+  if($('kpi-total-change')) $('kpi-total-change').innerHTML=`<span class="${cls(varPct)}">${arrow(varPct)}${Math.abs(varPct).toFixed(1)}%</span> ${mesLabel}`;
+  if($('kpi-lider-val'))  $('kpi-lider-val').textContent=lider?.name||'—';
+  if($('kpi-lider-sub'))  $('kpi-lider-sub').textContent=fK(lider?.abr||0)+' · '+(lider?.cli||0)+' clientes';
+  if($('kpi-lider-change')) $('kpi-lider-change').innerHTML=`<span class="${cls(liderVar)}">${arrow(liderVar)}${Math.abs(liderVar).toFixed(1)}%</span> ${mesLabel}`;
+  if($('kpi-pedidos-val'))$('kpi-pedidos-val').textContent=totalPed.toLocaleString('pt-BR');
+  if($('kpi-pedidos-sub'))$('kpi-pedidos-sub').textContent=totalCli+' clientes ativos';
+  if($('kpi-ticket-val')) $('kpi-ticket-val').textContent=fK(ticketMedio);
+  if($('kpi-ticket-sub')) $('kpi-ticket-sub').textContent='por pedido · '+mesTitle+' 2026';
+  // Rank total
+  if($('rank-total-dynamic')) $('rank-total-dynamic').textContent=fBRL(totalAbr);
+  // Topbar stats
+  if($('topbar-total')) $('topbar-total').textContent=fK(totalAbr);
+  if($('topbar-var'))  { $('topbar-var').textContent=(varPct>=0?'▲+':'▼')+Math.abs(varPct).toFixed(1)+'%'; $('topbar-var').className=varPct>=0?'up':'dn'; }
+  if($('topbar-count'))$('topbar-count').textContent=active.length;
+  // Análise KPIs
+  const analiseLabel=document.getElementById('analise-kpi-lbl-abr');
+  if(analiseLabel) analiseLabel.textContent='Total '+mesTitle;
+  if($('analise-abr-val'))  $('analise-abr-val').textContent=fK(totalAbr);
+  if($('analise-abr-sub'))  $('analise-abr-sub').textContent=fBRL(totalAbr);
+  if($('analise-mar-val'))  $('analise-mar-val').textContent=fK(totalMar);
+  if($('analise-mar-sub'))  $('analise-mar-sub').textContent=fBRL(totalMar);
+  if($('analise-alta-val')) $('analise-alta-val').textContent=maiorAlta?.name||'—';
+  if($('analise-alta-sub')) $('analise-alta-sub').innerHTML=`<span class="badge-up">▲ +${Math.abs(altaVar).toFixed(1)}%</span> M/M`;
+  if($('analise-queda-val'))$('analise-queda-val').textContent=maiorQueda?.name||'—';
+  if($('analise-queda-sub'))$('analise-queda-sub').innerHTML=`<span class="badge-dn">▼ ${Math.abs(quedaVar).toFixed(1)}%</span> M/M`;
+}
 
 const TOP_CLIENTES = [
   {r:1, nome:'PEG LEVE',                       vend:'Relson',    val:48712.50},
@@ -1271,6 +1371,313 @@ const VENDOR_TOP5 = {
   ],
 };
 
+/* ─────────────────────────────────────────
+   DADOS MAIO 2026
+───────────────────────────────────────── */
+// CRM_MES já declarado no topo do script
+
+const VENDEDORES_MAIO = [
+  {name:'Guilherme', av:'GU', color:'#00D4AA', total:423432.45, cli:40, ped:210, cod:'093'},
+  {name:'Relson',    av:'RE', color:'#90CAF9', total:250781.59, cli:41, ped: 59, cod:'094'},
+  {name:'Natália',   av:'NA', color:'#FF6B6B', total:174342.60, cli:28, ped: 47, cod:'116'},
+  {name:'Israel',    av:'IS', color:'#C77DFF', total:165187.17, cli:63, ped: 95, cod:'115'},
+  {name:'Keller',    av:'KE', color:'#80DEEA', total:105013.58, cli:29, ped: 40, cod:'117'},
+  {name:'Everaldo',  av:'EV', color:'#FF9A56', total: 94577.05, cli:14, ped: 22, cod:'107'},
+  {name:'Althieres', av:'AL', color:'#FFD93D', total: 73795.27, cli:27, ped: 38, cod:'119'},
+  {name:'Jorge',     av:'JO', color:'rgba(255,255,255,.75)', total:42171.16, cli:12, ped:17, cod:'118'},
+  {name:'João',     av:'JO2',color:'#A8EDEA', total:     0.00, cli: 0, ped:  0, cod:'120', newHire:true},
+];
+
+const CARTEIRA_MAIO = {
+'093':[
+  {cod:'119',  nome:'SAMUEL DE OLIVEIRA CHAGAS',           valor:25928.72},
+  {cod:'4313', nome:'INTECS JARDIM JARAGUA',               valor:25525.08},
+  {cod:'4534', nome:'INTECS M BOI MIRIM',                  valor:23065.11},
+  {cod:'4310', nome:'INTECS BRASILANDIA',                  valor:22591.89},
+  {cod:'4316', nome:'INTECS CIDADE TIRADENTES',            valor:21685.85},
+  {cod:'3998', nome:'AÇOUGUE TENESSE',                      valor:20220.24},
+  {cod:'852',  nome:'MERCADO ULTRA ECONOMIA',              valor:16410.78},
+  {cod:'4314', nome:'INTECS SAO MIGUEL PAULISTA',          valor:15717.59},
+  {cod:'4315', nome:'INTECS GUAIANASES',                   valor:14793.41},
+  {cod:'4136', nome:'MERCADINHO NITEROI',                  valor:14620.28},
+  {cod:'4063', nome:'MERCADO PERNAMBUCO',                  valor:14168.76},
+  {cod:'4000', nome:'TENESSE CARNES GUABIROBA',            valor:14048.28},
+  {cod:'4983', nome:'PANIFICADORA DELICIAS DO TRIGO',      valor:13785.13},
+  {cod:'4311', nome:'INTECS CITY JARAGUA',                 valor:12036.30},
+  {cod:'4164', nome:'MERCADINHO LUIGI',                    valor:11659.42},
+  {cod:'258',  nome:'LUIZ JACAREÍ',                       valor: 9658.32},
+  {cod:'4489', nome:'PLANALTO',                            valor: 9166.76},
+  {cod:'4864', nome:'PADARIA E CONFEITARIA SAO LUIS',      valor: 9120.24},
+  {cod:'3933', nome:'WL SUPERMERCADO JACUTINGA',           valor: 8733.13},
+  {cod:'4380', nome:'MERCADO PROGRESSO',                   valor: 8608.30},
+  {cod:'4701', nome:'MERCADO ALCANTARA',                   valor: 8384.96},
+  {cod:'4726', nome:'MERCADO PRECIOSO',                    valor: 8318.66},
+  {cod:'3382', nome:'MERCADO MAIA',                        valor: 8053.19},
+  {cod:'4190', nome:'SUPERMERCADOS SEMPRE JUNTO',          valor: 8009.69},
+  {cod:'3999', nome:'TENESSE CARNES RAGUEB',               valor: 7362.97},
+  {cod:'4012', nome:'MERCADO SAO FRANCISCO DE PAULA',      valor: 6789.93},
+  {cod:'4710', nome:'MERCADO JL',                          valor: 6582.59},
+  {cod:'4962', nome:'MERCADO PROGRESSO LOJA 1',            valor: 6475.95},
+  {cod:'781',  nome:'OSVALDO XAVIER DE MACEDO JUNIOR',     valor: 6157.44},
+  {cod:'4849', nome:'MERCADO BEM ESTAR',                   valor: 6014.32},
+  {cod:'4250', nome:'JM MERCADO',                          valor: 5868.00},
+  {cod:'550',  nome:'PATRICIA AP. DA SILVA',               valor: 5449.35},
+  {cod:'4963', nome:'MERCADO PROGRESSO LOJA 02',           valor: 5215.13},
+  {cod:'4336', nome:'MERCADO MICHELITO',                   valor: 5008.63},
+  {cod:'4735', nome:'MERCADO ECONOMIX',                    valor: 4498.32},
+  {cod:'4633', nome:'MERCADO ANA MARIA',                   valor: 3843.84},
+  {cod:'4986', nome:'PADARIA DONA ANA',                    valor: 3258.75},
+  {cod:'4964', nome:'MERCADO PROGRESSO LOJA 03',           valor: 3214.75},
+  {cod:'4387', nome:'MERCADO ICHIBAN',                     valor: 2812.01},
+  {cod:'4943', nome:'PADARIA DONA BELLA',                  valor:   570.38},
+],
+'094':[
+  {cod:'2662', nome:'PEG LEVE',                            valor:39560.79},
+  {cod:'3576', nome:'PADARIA RAIO DE SOL PRA',             valor:16111.98},
+  {cod:'4544', nome:'JK MERCADINHO E PADARIA',             valor:14318.85},
+  {cod:'3450', nome:'PADARIA DO MANOEL',                   valor:12019.45},
+  {cod:'19',   nome:'ANA CLAUDIA DE MORAES',              valor:10119.30},
+  {cod:'4130', nome:'MERCADINHO E PADARIA KI-PREÇO',       valor: 9117.25},
+  {cod:'21',   nome:'ANA CRISTINA DOS SANTOS ALMEIDA',    valor: 8914.35},
+  {cod:'4815', nome:'MERCADO E PADARIA BOM GOSTO',         valor: 8529.91},
+  {cod:'4115', nome:'MERCADINHO KI-PREÇO LOJA 2',          valor: 8125.56},
+  {cod:'4966', nome:'PADARIA FLAMINGO',                    valor: 7913.38},
+  {cod:'4947', nome:'MERCADO REAL DO VALE',                valor: 7319.00},
+  {cod:'4830', nome:'PADARIA SÃO JOÃO',                    valor: 6315.90},
+  {cod:'4860', nome:'SUPERMERCADO UNIÃO',                  valor: 5922.46},
+  {cod:'4199', nome:'MERCADO VISTA ALEGRE',                valor: 5419.33},
+  {cod:'1823', nome:'SOLANGE ALVES DOS SANTOS',            valor: 5321.70},
+  {cod:'4154', nome:'MERCADO SOL',                         valor: 4982.50},
+  {cod:'4565', nome:'PADARIA CENTRAL DO VALE',             valor: 4512.18},
+  {cod:'4539', nome:'HORTIFRUTI DA VILA LOJA 2',           valor: 4312.26},
+  {cod:'4731', nome:'MERCADO DA FAMILIA LOJA 03',          valor: 4298.82},
+  {cod:'2182', nome:'GUSTAVO HENRIQUE DIAS SILVA',         valor: 3840.43},
+  {cod:'4102', nome:'MERCADINHO ALMEIDA',                  valor: 3784.50},
+  {cod:'2483', nome:'INACIO ALVES NETO',                   valor: 3655.83},
+  {cod:'3340', nome:'MERCADO MOREIRA',                     valor: 3541.20},
+  {cod:'4903', nome:'PANIFICADORA CENTRAL LTDA',           valor: 3498.52},
+  {cod:'1262', nome:'PADARIA RECANTO DO GRAO',             valor: 3321.80},
+  {cod:'4152', nome:'SUPERMERCADO MENK LOJA 1',            valor: 3125.90},
+  {cod:'34',   nome:'RAIMUNDO DE LIMA CORREIA',            valor: 3116.53},
+  {cod:'3451', nome:'MERCADINHO POPULAR',                  valor: 2981.54},
+  {cod:'4104', nome:'MERCEARIA DO ZE',                     valor: 2912.14},
+  {cod:'4330', nome:'EMPORIO DO VALE',                     valor: 2814.50},
+  {cod:'3324', nome:'CASA DE FRIOS MUTINGA',               valor: 2729.98},
+  {cod:'4407', nome:'LEONARDO DE OLIVEIRA LIRA',           valor: 2718.01},
+  {cod:'4881', nome:'VEM VEM',                             valor: 2350.25},
+  {cod:'4131', nome:'MERCADO GAMA',                        valor: 2292.73},
+  {cod:'4805', nome:'MALIBU EMPORIO E CONVENIENCIA',       valor: 2229.30},
+  {cod:'3924', nome:'SUPERMERCADO DO REI',                 valor: 2060.88},
+  {cod:'4984', nome:'HORTIFRUTI SANTO ANTONIO',            valor: 1981.53},
+  {cod:'4530', nome:'PADARIA MODELO',                      valor: 1545.03},
+  {cod:'4991', nome:'MINI MERCADO DUBOM',                  valor: 1254.12},
+  {cod:'2360', nome:'LOJA DO TRIGO',                       valor:   984.33},
+  {cod:'4124', nome:'MERCADINHO SANTA INÊS',               valor:   811.79},
+],
+'107':[
+  {cod:'4654', nome:'MERCADO TRINDADE',                    valor:10541.15},
+  {cod:'4862', nome:'COMERCIO DO RATINHO',                 valor: 9895.49},
+  {cod:'4827', nome:'SABOR DELICIA GUARULHOS LTDA',        valor: 9552.54},
+  {cod:'4660', nome:'MERCADO PAGUE MENOS',                 valor: 8593.83},
+  {cod:'4665', nome:'SUPERMERCADO IKA',                    valor: 7644.82},
+  {cod:'4940', nome:'MERCADINHO NUNES',                    valor: 6939.24},
+  {cod:'4639', nome:'HORTIFRUTI MERCEARIA E ACOUGUE BOM',  valor: 5885.20},
+  {cod:'4721', nome:'MERCADINHO JUPI',                     valor: 5309.02},
+  {cod:'4956', nome:'MERCADO PAGUE MENOS LOJA 2',          valor: 5175.57},
+  {cod:'4730', nome:'SUPERMERCADO FAMILIA',                valor: 4738.82},
+  {cod:'4775', nome:'EDUARDO JESUS DE SOUSA',              valor: 4659.40},
+  {cod:'4842', nome:'PADARIA E RESTAURANTE KELLY',         valor: 4305.25},
+  {cod:'4838', nome:'SOMOS SUPERMERCADO',                  valor: 4195.50},
+  {cod:'4581', nome:'MERCADO HEITOR',                      valor: 1341.22},
+],
+'115':[
+  {cod:'2495', nome:'IPAVA RAIO SUPERMERCADO LTDA',        valor:15966.12},
+  {cod:'2380', nome:'MERCADINHO PRECO BOM',                valor: 9749.13},
+  {cod:'4296', nome:'BLACK BOI',                           valor: 6697.29},
+  {cod:'4832', nome:'MERCADINHO RIOS CARNEIRO LTDA',       valor: 5671.93},
+  {cod:'4723', nome:'BLACK BOI JD RECORD',                 valor: 5498.81},
+  {cod:'17',   nome:'ANA NIVIA PEIXOTO FERREIRA',          valor: 5493.23},
+  {cod:'4725', nome:'O BOIADEIRO',                         valor: 5350.36},
+  {cod:'172',  nome:'JOSE ADEILSON',                       valor: 4829.90},
+  {cod:'4195', nome:'FOX CARNES INDEPENDENCIA',            valor: 4444.82},
+  {cod:'4884', nome:'MERCADO SONIA',                       valor: 4361.55},
+  {cod:'4093', nome:'PADARIA BAR DO ZE',                   valor: 4124.53},
+  {cod:'4722', nome:'BARATINHO ALMEIDA',                   valor: 3997.13},
+  {cod:'2499', nome:'SUPERMERCADO BEATRIZ LTDA',           valor: 3803.19},
+  {cod:'3437', nome:'ENERGIA POSITIVA',                    valor: 3695.47},
+  {cod:'4875', nome:'PADARIA GOLDEN GRAO',                 valor: 3603.15},
+  {cod:'266',  nome:'MERCADO TRINDADE',                    valor: 3025.31},
+  {cod:'4724', nome:'BLACK BOI SUPER SA',                  valor: 3022.16},
+  {cod:'3350', nome:'MERCEARIA DO MINEIRO',                valor: 2977.67},
+  {cod:'4389', nome:'MERCEARIA LICOTA',                    valor: 2932.79},
+  {cod:'2808', nome:'MERCEARIA 3 IRMÃOS',                  valor: 2848.73},
+  {cod:'4186', nome:'HORTIFRUTI MAIS SABOR',               valor: 2734.77},
+  {cod:'171',  nome:'MINI MERCADO GUSTAVINHO',             valor: 2532.87},
+  {cod:'4134', nome:'DUBOM CAFE',                          valor: 2518.43},
+  {cod:'4685', nome:'EMPORIO DANI E CIA',                  valor: 2305.85},
+  {cod:'142',  nome:'WANESSA MISSIAS DE SOUZA',            valor: 2300.56},
+  {cod:'4630', nome:'AÇOUGUE PATA NEGRA',                  valor: 2292.48},
+  {cod:'2103', nome:'FERREIRA PAES E DOCES',               valor: 2223.61},
+  {cod:'4904', nome:'PADARIA INTERLAGOS LTDA',             valor: 2202.03},
+  {cod:'4893', nome:'MERCADO SOUZA LIMA',                  valor: 2198.73},
+  {cod:'4680', nome:'MERCADO HORA CERTA',                  valor: 2020.71},
+  {cod:'1174', nome:'MARI SUPERMERCADOS',                  valor: 2006.42},
+  {cod:'2813', nome:'GERLAINE SOUZA MOREIRA CARLOS',       valor: 1939.62},
+  {cod:'4568', nome:'EMPORIO DOS ALIMENTOS',               valor: 1911.02},
+  {cod:'4508', nome:'PADARIA TRES IRMÃOS VISTA ALEGRE',    valor: 1901.25},
+  {cod:'2230', nome:'MERCADINHO VILA CLELIA',              valor: 1702.29},
+  {cod:'4562', nome:'MAIS BARATO MINI MERCADO',            valor: 1700.08},
+  {cod:'4073', nome:'FOX CARNE',                           valor: 1665.36},
+  {cod:'4201', nome:'FOX CARNES JD ROSA',                  valor: 1635.77},
+  {cod:'1657', nome:'MERCADO SANTA FE',                    valor: 1547.40},
+  {cod:'4550', nome:'PADARIA SÃO MARCOS',                  valor: 1534.83},
+  {cod:'4820', nome:'PADARIA TEREZINHA',                   valor: 1491.75},
+  {cod:'2128', nome:'PADARIA NOVA GEOGRAFOS',              valor: 1468.99},
+  {cod:'4662', nome:'PADARIA PAO NOBRE LOJA 2',            valor: 1423.57},
+  {cod:'4513', nome:'BOI FORT',                            valor: 1184.82},
+  {cod:'98',   nome:'MINI MERCADO REIS LTDA ME',           valor: 1183.57},
+  {cod:'1268', nome:'PADARIA VITORIA',                     valor: 1150.08},
+  {cod:'2289', nome:'ACOUGUE E MERCEARIA NANDA',           valor: 1140.03},
+  {cod:'4450', nome:'PADARIA ARRUDA',                      valor: 1055.88},
+  {cod:'3077', nome:'MERCADO T.D. JARDIM JARAGUA',         valor: 1019.40},
+  {cod:'4467', nome:'PADARIA PAO NOBRE',                   valor: 1016.84},
+  {cod:'2193', nome:'HORTIFRUTI OLIVEIRA',                 valor:   960.82},
+  {cod:'4242', nome:'PADARIA DUAS IRMAS',                  valor:   923.26},
+  {cod:'2496', nome:'MERCADINHO AMANHECER',                valor:   900.25},
+  {cod:'2062', nome:'PADARIA BELLATRIZ',                   valor:   882.00},
+  {cod:'3481', nome:'MERCADO EMPORIO EUCALIPTOS',          valor:   879.26},
+  {cod:'4650', nome:'MERCADO EUCALIPTO LOJA 02',           valor:   782.33},
+  {cod:'4191', nome:'FENIX SUPERMERCADO',                  valor:   780.00},
+  {cod:'4423', nome:'PANIFICADORA GNC',                    valor:   760.50},
+  {cod:'3498', nome:'MARCOS DOS SANTOS',                   valor:   648.05},
+  {cod:'4188', nome:'MERCADO DA CARNE SHOP BUTCHER',       valor:   624.00},
+  {cod:'2216', nome:'ROSELIANA DOS SANTOS PAES',           valor:   597.03},
+  {cod:'2383', nome:'SABORES DA VILA',                     valor:   521.75},
+  {cod:'4942', nome:'PADARIA DUAS IRMAS 2',                valor:   417.64},
+  {cod:'2735', nome:'MERCADO BOM CLIMA',                   valor:   408.00},
+],
+'116':[
+  {cod:'1681', nome:'DISTRIBUIDORA DE HORTIFRUTIGRANJEIRO',valor:22098.07},
+  {cod:'3108', nome:'SUPERMERCADO PETEKO',                 valor:17304.93},
+  {cod:'3402', nome:'SONHADOR',                            valor:13381.83},
+  {cod:'14',   nome:'ADRIANA / JOAO',                      valor:12890.43},
+  {cod:'1996', nome:'MERCADO PALACIOS',                    valor:10339.24},
+  {cod:'4541', nome:'HORTIFRUTI GATÃO LOJA 02',             valor: 9011.30},
+  {cod:'3369', nome:'MERCADO GONÇALVES',                   valor: 8903.95},
+  {cod:'2726', nome:'MERCADO GABRIEL',                     valor: 8765.38},
+  {cod:'144',  nome:'LEANDRO RIBEIRO PORTO',               valor: 8185.16},
+  {cod:'43',   nome:'MANOEL A SOBRINHO-ME',                valor: 6573.90},
+  {cod:'1982', nome:'BAR E MERCEARIA ROSA',                valor: 6360.44},
+  {cod:'92',   nome:'FRANCISCO CANING DE LUCAS LOJA 02',   valor: 5958.84},
+  {cod:'2750', nome:'PAOZINHO DO CEU',                     valor: 5923.60},
+  {cod:'2416', nome:'ÉRICA PORFÍRIO SANTA ROSA FERREIRA',   valor: 5391.73},
+  {cod:'520',  nome:'MARA FERREIRA MARQUES',               valor: 4650.39},
+  {cod:'3024', nome:'BOUTIQUE DE CARNE',                   valor: 4497.27},
+  {cod:'527',  nome:'ALEX SANDRO MAIA DOS SANTOS',         valor: 4191.74},
+  {cod:'1726', nome:'ROGÉRIO DE ANDRADE BENEDITO',          valor: 3467.40},
+  {cod:'2153', nome:'JOAO PEDRO MARTINS',                  valor: 2655.51},
+  {cod:'4907', nome:'MERCADINHO DA VILLA',                 valor: 2575.63},
+  {cod:'4967', nome:'SUPERMERCADO PASTORINHO',             valor: 2441.55},
+  {cod:'12',   nome:'ADAILTON RODRIGUES DOS SANTOS',       valor: 1975.03},
+  {cod:'4456', nome:'MERCADO GT',                          valor: 1578.14},
+  {cod:'4824', nome:'DOCE PRIMUS LOJA 2',                  valor: 1442.50},
+  {cod:'2037', nome:'ELAINE MONTEIRO FERREIRA',            valor: 1019.38},
+  {cod:'2692', nome:'GONCALO GENERINO DA SILVA',           valor:   945.52},
+  {cod:'151',  nome:'JOSE CARLOS BATISTA DA SILVA',        valor:   907.66},
+  {cod:'3178', nome:'TAMIRES MINIMERCADO',                 valor:   906.08},
+],
+'117':[
+  {cod:'211',  nome:'NOVA GERAÇÃO LOJA 1',                  valor:13419.60},
+  {cod:'42',   nome:'M.A.L DE Q EVANGELISTA MERC',         valor: 7906.77},
+  {cod:'4430', nome:'MERCADINHO OLIVEIRA',                 valor: 6927.56},
+  {cod:'908',  nome:'LUZIA CARDOSO DA SILVA',              valor: 6327.52},
+  {cod:'2339', nome:'VALDENIA HENRIQUE DA COSTA',          valor: 6129.51},
+  {cod:'4969', nome:'MERCEARIA E ADEGA LOPES',             valor: 4907.18},
+  {cod:'4274', nome:'PADARIA DA VILA',                     valor: 4839.80},
+  {cod:'4413', nome:'MÃE E FILHA',                          valor: 4293.66},
+  {cod:'1814', nome:'SUPERMERCADO TIM TIM',                valor: 4273.24},
+  {cod:'4289', nome:'PADARIA FERNANDES',                   valor: 4179.66},
+  {cod:'4084', nome:'MERCEARIA VIEIRA',                    valor: 3368.97},
+  {cod:'68',   nome:'JOSE EVALDO S PAIVA MINIMER',         valor: 3337.37},
+  {cod:'4189', nome:'MERCADO ROSEIRA',                     valor: 3162.66},
+  {cod:'4941', nome:'PADARIA SUPREMA PRIME',               valor: 3137.53},
+  {cod:'4582', nome:'PADARIA COWBOY',                      valor: 3019.05},
+  {cod:'4147', nome:'RANCHO NOGUEIRAS',                    valor: 2919.01},
+  {cod:'4944', nome:'MULTIPANE PADARIA',                   valor: 2907.77},
+  {cod:'4264', nome:'MERCADO AJS',                         valor: 2885.08},
+  {cod:'31',   nome:'RAEL PEREIRA MENDES',                 valor: 2332.04},
+  {cod:'3650', nome:'OTAVIO FRANCISCO DOS SANTOS',         valor: 2268.36},
+  {cod:'4792', nome:'MERCADINHO DA FAMILIA',               valor: 1951.98},
+  {cod:'4628', nome:'PADARIA CIDA',                        valor: 1743.38},
+  {cod:'2114', nome:'MARIA DO CARMO OLIVEIRA SILVA',       valor: 1659.10},
+  {cod:'1831', nome:'SOLANGE DE ANDRADE FREITAS',          valor: 1549.82},
+  {cod:'4908', nome:'BELLA PANINI PADARIA E MERCEARIA',    valor: 1540.16},
+  {cod:'4351', nome:'MERCADO E PADARIA NEVES',             valor: 1442.42},
+  {cod:'3125', nome:'VCJ JACOME',                          valor: 1125.72},
+  {cod:'4436', nome:'FRUIT CITY',                          valor: 1014.00},
+  {cod:'4945', nome:'RESTAURANTE INCONFIDENCIA MINEIRA',   valor: 4444.66},
+],
+'118':[
+  {cod:'4848', nome:'FAMILIA VAREJO',                      valor:15019.42},
+  {cod:'59',   nome:'MERCADO E MERC.ALIANÇA LTDA',         valor: 6849.21},
+  {cod:'2414', nome:'LOJA MERCADO E MERCEARIA ALIANÇA',    valor: 5627.75},
+  {cod:'1140', nome:'JANIO/J.M MINI PADARIA E MERCEARIA',  valor: 4125.93},
+  {cod:'3564', nome:'MERCADO ALIANÇA LOJA 3',              valor: 3315.77},
+  {cod:'1167', nome:'CARLOS ALVES/MERCADO E PADARIA BOM',  valor: 1982.30},
+  {cod:'4388', nome:'MERCADO WALKER',                      valor: 1301.75},
+  {cod:'4520', nome:'PADARIA GIRASSOL',                    valor: 1115.03},
+  {cod:'4885', nome:'MINI MERCADO PARITO',                 valor: 1022.98},
+  {cod:'4416', nome:'SUPERMERCADO BETE',                   valor:   787.16},
+  {cod:'4886', nome:'MERCEARIA CARIOCA',                   valor:   671.27},
+  {cod:'4286', nome:'PADARIA BELLA CASA NOVA',             valor:   352.59},
+],
+'119':[
+  {cod:'4680', nome:'MERCADO HORA CERTA',                  valor: 6293.08},
+  {cod:'2826', nome:'COMPRE BEM',                          valor: 6225.52},
+  {cod:'4927', nome:'SETE MINI MERCADO',                   valor: 6210.67},
+  {cod:'2103', nome:'FERREIRA PAES E DOCES',               valor: 4305.97},
+  {cod:'3320', nome:'GR SUPERMERCADOS',                    valor: 4167.30},
+  {cod:'2813', nome:'GERLAINE SOUZA MOREIRA CARLOS',       valor: 3880.86},
+  {cod:'4820', nome:'PADARIA TEREZINHA',                   valor: 3834.15},
+  {cod:'3077', nome:'MERCADO T.D. JARDIM JARAGUA',         valor: 3576.25},
+  {cod:'3295', nome:'JOSÉ NUNES DOS SANTOS',               valor: 3387.40},
+  {cod:'4630', nome:'AÇOUGUE PATA NEGRA',                  valor: 3267.28},
+  {cod:'2289', nome:'ACOUGUE E MERCEARIA NANDA',           valor: 3186.86},
+  {cod:'3159', nome:'SOL NASCENTE',                        valor: 2732.50},
+  {cod:'2062', nome:'PADARIA BELLATRIZ',                   valor: 2300.78},
+  {cod:'4650', nome:'MERCADO EUCALIPTO LOJA 02',           valor: 2235.25},
+  {cod:'1016', nome:'4 FILHOS VARGEM GRANDE',              valor: 2227.98},
+  {cod:'3952', nome:'DCM MERCADO',                         valor: 2179.45},
+  {cod:'3481', nome:'MERCADO EMPORIO EUCALIPTOS',          valor: 2029.42},
+  {cod:'4280', nome:'MERCADO RONDON',                      valor: 1782.24},
+  {cod:'4997', nome:'PANIFICADORA VILLAGE',                valor: 1682.60},
+  {cod:'3343', nome:'MERCADO NOGUEIRA',                    valor: 1418.65},
+  {cod:'4364', nome:'EMPORIO SANTO ESTEVAO',               valor: 1411.08},
+  {cod:'4985', nome:'WA MERCADO E PADARIA E LANCHONETE',   valor: 1290.00},
+  {cod:'3498', nome:'MARCOS DOS SANTOS',                   valor: 1170.13},
+  {cod:'2216', nome:'ROSELIANA DOS SANTOS PAES',           valor: 1050.08},
+  {cod:'2867', nome:'CHARMOSA',                            valor:   960.00},
+  {cod:'2366', nome:'LOJA DA ISA',                         valor:   528.01},
+  {cod:'4273', nome:'MERCADINHO SOLAR',                    valor:   461.76},
+],
+'120':[],
+};
+
+// Top clientes Maio 2026
+const TOP_CLIENTES_MAIO = [
+  {r:1, nome:'PEG LEVE',                           vend:'Relson',    val:39560.79},
+  {r:2, nome:'SAMUEL DE OLIVEIRA CHAGAS',           vend:'Guilherme', val:25928.72},
+  {r:3, nome:'INTECS JARDIM JARAGUA',               vend:'Guilherme', val:25525.08},
+  {r:4, nome:'DISTRIBUIDORA HORTIFRUTIGRANJEIRO',   vend:'Natália',   val:22098.07},
+  {r:5, nome:'INTECS M BOI MIRIM',                  vend:'Guilherme', val:23065.11},
+  {r:6, nome:'INTECS BRASILANDIA',                  vend:'Guilherme', val:22591.89},
+  {r:7, nome:'INTECS CIDADE TIRADENTES',            vend:'Guilherme', val:21685.85},
+  {r:8, nome:'AÇOUGUE TENESSE',                      vend:'Guilherme', val:20220.24},
+  {r:9, nome:'PADARIA RAIO DE SOL PRA',             vend:'Relson',    val:16111.98},
+  {r:10,nome:'IPAVA RAIO SUPERMERCADO LTDA',        vend:'Israel',    val:15966.12},
+];
+
+
 const AGENDA = [
   {dates:'04–05 Mai', days:'Seg/Ter', nome:'MULTI PANE',          tipo:'Treinamento',     tec:'Juan',    vend:'Keller',   local:'Mogi'},
   {dates:'08–09 Mai', days:'Sex/Sáb', nome:'ARMAZÉM BRASILÂNDIA', tipo:'Café',            tec:'Juan',    vend:'Guilherme',local:'Brasilândia'},
@@ -1286,7 +1693,7 @@ const AGENDA = [
   {dates:'05–06 Mai', days:'Ter/Qua', nome:'RESERVADO',           tipo:'Reservado',       tec:'Gabriel', vend:'—',        local:'—'},
 ];
 
-const TEC_COLORS = {Juan:'#FF9A56',Rogério:'#FF6B6B',Matheus:'#00D4AA',Marcelo:'#C77DFF',Gabriel:'#80DEEA'};
+const TEC_COLORS = {Juan:'#80DEEA',Rogério:'#FF6B6B',Matheus:'#00D4AA',Marcelo:'#C77DFF',Leonardo:'#FF9A56',Caio:'#FFD93D',Gabriel:'#90CAF9'};
 const TIPO_COLORS = {Treinamento:'rgba(0,212,170,.15)',Café:'rgba(255,217,61,.15)',Apresentação:'rgba(144,202,249,.15)',Reservado:'rgba(255,255,255,.08)'};
 const TIPO_TEXT   = {Treinamento:'#00D4AA',Café:'#FFD93D',Apresentação:'#90CAF9',Reservado:'#fff'};
 
@@ -1336,6 +1743,11 @@ function showTab(tab, el){
   document.getElementById('tab-'+tab).classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   if(el) el.classList.add('active');
+  // Vendedor: ao abrir Análise, força subtab Por Vendedor
+  if(tab==='analise' && window.CRM_VENDOR_ID){
+    const pvBtn=document.querySelectorAll('#tab-analise .subtab')[2];
+    if(pvBtn) showSubtab('porvendedor',pvBtn);
+  }
 }
 function showTabMobile(tab, el){
   showTab(tab, null);
@@ -1347,12 +1759,20 @@ function showTabMobile(tab, el){
    SUBTABS
 ───────────────────────────────────────── */
 function showSubtab(id,el){
-  ['visao','comparativo','porvendedor'].forEach(s=>{
-    document.getElementById('subtab-'+s).style.display=s===id?'block':'none';
+  // Vendedor só pode ver Por Vendedor ou Carteira
+  if(window.CRM_VENDOR_ID && (id==='visao'||id==='comparativo')){
+    id='porvendedor';
+    const pvBtns=document.querySelectorAll('#tab-analise .subtab');
+    el=pvBtns[2]||el;
+  }
+  ['visao','comparativo','porvendedor','carteira'].forEach(s=>{
+    const el2=document.getElementById('subtab-'+s);
+    if(el2) el2.style.display=s===id?'block':'none';
   });
   document.querySelectorAll('#tab-analise .subtab').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
   if(id==='porvendedor') initVendorPills();
+  if(id==='carteira') initCarteiraSelect();
 }
 function showRegSubtab(id,el){
   ['visita','prospeccao','apresentacao','cadastro'].forEach(s=>{
@@ -1388,36 +1808,47 @@ function filterAgenda(filter,el){
    RANKING
 ───────────────────────────────────────── */
 function renderRanking(){
-  const sorted=[...VENDEDORES].sort((a,b)=>b.abr-a.abr);
+  const isMaio=CRM_MES==='maio';
+  const source=isMaio
+    ? VENDEDORES_MAIO.map(v=>({...v, abr:v.total, mar:VENDEDORES.find(x=>x.cod===v.cod)?.abr||0}))
+    : VENDEDORES;
+  const sorted=[...source].sort((a,b)=>b.abr-a.abr);
   const max=sorted.find(v=>v.abr>0)?.abr||1;
   const medals=['🥇','🥈','🥉'];
   let html='';
   sorted.forEach((v,i)=>{
     const pct=v.abr>0?Math.round((v.abr/max)*100):0;
     const isNew=v.newHire;
+    const varPctV=v.mar>0?((v.abr-v.mar)/v.mar*100):null;
     html+=`<div class="rank-item">
       <div class="rank-medal">${i<3&&!isNew?medals[i]:'<span style="font-size:11px;color:var(--text-muted)">'+(i+1)+'</span>'}</div>
       <div class="rank-av" style="background:${isNew?'rgba(255,255,255,.08)':v.color+'22'};color:${v.color}">${v.av}</div>
       <div class="rank-info">
-        <div class="rank-name" style="color:${v.color}">${v.name}${isNew?' <span style="font-size:9px;color:var(--gold)">★ Novo</span>':''}</div>
+        <div class="rank-name" style="color:${v.color}">${v.name}${v.newHire?' <span style="font-size:9px;color:var(--gold)">★ Novo</span>':''}</div>
         <div class="rank-meta">${isNew?'Ingresso Mai/2026 · cód.'+v.cod:v.cli+' cli · '+v.ped+' ped · cód.'+v.cod}</div>
       </div>
       <div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:${pct}%;background:${v.color}"></div></div>
       <div class="rank-value">
         <div class="rank-val-main" style="color:${isNew?'var(--text-muted)':v.color}">${isNew?'—':fK(v.abr)}</div>
-        <div class="rank-val-change ${isNew?'':'up'}">${isNew?'Abr: —':'▲ vs Mar'}</div>
+        <div class="rank-val-change ${varPctV===null?'':varPctV>=0?'up':'dn'}">${varPctV===null?'Novo':((varPctV>=0?'▲ +':'▼ ')+Math.abs(varPctV).toFixed(1)+'%')}</div>
       </div>
     </div>`;
   });
   document.getElementById('ranking-list').innerHTML=html;
+  // update rank total
+  const total=sorted.reduce((s,v)=>s+v.abr,0);
+  const el2=document.getElementById('rank-total-dynamic');
+  if(el2) el2.textContent=fBRL(total);
 }
 
 /* ─────────────────────────────────────────
    TOP 5
 ───────────────────────────────────────── */
 function renderTop5(){
+  const isMaio=CRM_MES==='maio';
+  const list=isMaio?TOP_CLIENTES_MAIO:TOP_CLIENTES;
   let html='';
-  TOP_CLIENTES.slice(0,5).forEach(c=>{
+  list.slice(0,5).forEach(c=>{
     const col=vendorColor(c.vend);
     html+=`<div class="top5-item">
       <div class="top5-rank">${c.r}</div>
@@ -1430,25 +1861,140 @@ function renderTop5(){
 }
 
 /* ─────────────────────────────────────────
+   SELETOR DE MÊS
+───────────────────────────────────────── */
+function setMes(mes, btn){
+  CRM_MES=mes;
+  document.querySelectorAll('.mes-toggle-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  // Atualizar todos os componentes dinâmicos
+  renderKPIs();
+  renderRanking();
+  renderTop5();
+  renderDonut('donut-svg','donut-legend');
+  renderDonut('donut-svg-2','donut-legend-2');
+  renderAnaliseTable();
+  renderComparativo();
+  renderCarteira();
+  // Atualizar label
+  const sub=document.getElementById('analise-section-sub');
+  if(sub) sub.textContent=mes==='maio'?'Carteiras de Maio 2026':'Comparativo Março vs Abril 2026';
+}
+
+/* ─────────────────────────────────────────
+   CARTEIRA DE CLIENTES
+───────────────────────────────────────── */
+let _carteiraInit=false;
+function initCarteiraSelect(){
+  const sel=document.getElementById('carteira-vend-select');
+  if(!sel||_carteiraInit) return;
+  _carteiraInit=true;
+  // Preenche dropdown com os 9 vendedores
+  VENDEDORES_MAIO.forEach(v=>{
+    const opt=document.createElement('option');
+    opt.value=v.cod;
+    opt.textContent=v.name+' ('+v.cod+')';
+    sel.appendChild(opt);
+  });
+  // Se for perfil VENDEDOR, pré-seleciona e bloqueia
+  if(window.CRM_VENDOR_ID){
+    sel.value=window.CRM_VENDOR_ID;
+    sel.disabled=true;
+    renderCarteira();
+  }
+}
+
+function renderCarteira(){
+  const sel=document.getElementById('carteira-vend-select');
+  const wrap=document.getElementById('carteira-table-wrap');
+  const footer=document.getElementById('carteira-footer');
+  const footCount=document.getElementById('carteira-footer-count');
+  const footTotal=document.getElementById('carteira-footer-total');
+  const search=(document.getElementById('carteira-search')?.value||'').toLowerCase();
+  if(!sel||!wrap) return;
+  const cod=sel.value;
+  if(!cod){
+    wrap.innerHTML='<div style="text-align:center;padding:40px;color:rgba(255,255,255,.3);font-size:13px">⊕ Selecione um vendedor para visualizar a carteira</div>';
+    if(footer) footer.style.display='none';
+    return;
+  }
+  // Fonte de dados conforme mês
+  const clientes=CRM_MES==='maio'?(CARTEIRA_MAIO[cod]||[]):[];
+  const vInfo=VENDEDORES_MAIO.find(v=>v.cod===cod)||VENDEDORES.find(v=>v.cod===cod)||{};
+  // Filtrar por busca
+  const filtered=clientes.filter(c=>
+    c.nome.toLowerCase().includes(search)||c.cod.includes(search)
+  );
+  // Total
+  const totalFiltrado=filtered.reduce((s,c)=>s+c.valor,0);
+  const totalBruto  =clientes.reduce((s,c)=>s+c.valor,0);
+  if(filtered.length===0){
+    wrap.innerHTML='<div style="text-align:center;padding:32px;color:rgba(255,255,255,.3);font-size:13px">Nenhum cliente encontrado</div>';
+    if(footer) footer.style.display='none';
+    return;
+  }
+  // Construir tabela
+  let tbl=`<table class="tbl"><thead><tr>
+    <th style="width:60px">#</th>
+    <th style="width:70px">Cód.</th>
+    <th>Cliente</th>
+    <th style="width:140px;text-align:right">Valor</th>
+    <th style="width:100px">%</th>
+  </tr></thead><tbody>`;
+  filtered.forEach((c,i)=>{
+    const pct=totalBruto>0?((c.valor/totalBruto)*100):0;
+    tbl+=`<tr>
+      <td style="color:var(--text-muted);font-size:11px">${i+1}</td>
+      <td style="color:var(--text-dim);font-size:11px;font-weight:600">${c.cod}</td>
+      <td style="font-size:12px;max-width:220px">${c.nome}</td>
+      <td style="text-align:right;font-weight:700;color:${vInfo.color||'#fff'}">${fBRL(c.valor)}</td>
+      <td class="carteira-bar">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="flex:1;height:5px;background:rgba(255,255,255,.08);border-radius:3px">
+            <div class="carteira-bar-inner" style="width:${pct.toFixed(1)}%;background:${vInfo.color||'rgba(255,255,255,.4)'}">&nbsp;</div>
+          </div>
+          <span style="font-size:10px;color:var(--text-dim);width:32px">${pct.toFixed(1)}%</span>
+        </div>
+      </td>
+    </tr>`;
+  });
+  tbl+='</tbody></table>';
+  wrap.innerHTML=tbl;
+  // Footer
+  if(footer){
+    footer.style.display='flex';
+    footCount.textContent=filtered.length+' cliente'+(filtered.length!==1?'s':'')+' · '+CRM_MES.charAt(0).toUpperCase()+CRM_MES.slice(1)+' 2026';
+    footTotal.textContent='Total: '+fBRL(totalFiltrado)+(search?'  (filtrado)':'');
+  }
+}
+/* ─────────────────────────────────────────
    DONUT
 ───────────────────────────────────────── */
 function renderDonut(svgId, legendId){
   const svg=document.getElementById(svgId);
   const legend=document.getElementById(legendId);
   if(!svg||!legend) return;
-  const sorted=[...VENDEDORES].sort((a,b)=>b.abr-a.abr);
+  const isMaio=CRM_MES==='maio';
+  const source=isMaio
+    ? VENDEDORES_MAIO.map(v=>({name:v.name,color:v.color,abr:v.total}))
+    : VENDEDORES;
+  // Filtra apenas quem tem vendas (evita divisão por zero)
+  const sorted=[...source].filter(v=>v.abr>0).sort((a,b)=>b.abr-a.abr);
   const total=sorted.reduce((s,v)=>s+v.abr,0);
+  if(total===0||sorted.length===0){
+    svg.innerHTML='<text x="60" y="65" text-anchor="middle" fill="rgba(255,255,255,.3)" font-size="10">Sem dados</text>';
+    legend.innerHTML='';
+    return;
+  }
   const R=50, C=Math.PI*2*R;
   let offset=0;
   let segs='', legendHtml='';
   sorted.forEach(v=>{
     const share=v.abr/total;
     const dash=share*C;
-    const dashOff=C-dash;
-    const rot=360*(offset/C);
     segs+=`<circle cx="60" cy="60" r="${R}" fill="none" stroke="${v.color}" stroke-width="18"
       stroke-dasharray="${dash} ${C-dash}"
-      stroke-dashoffset="${C-(offset)}"
+      stroke-dashoffset="${C-offset}"
       transform="rotate(-90 60 60)"
       style="transition:stroke-dashoffset .6s ease"/>`;
     legendHtml+=`<div class="donut-legend-item">
@@ -1496,8 +2042,8 @@ function renderAgenda(filterTec){
    ANALISE TABLE
 ───────────────────────────────────────── */
 function renderAnaliseTable(){
-  const sorted=[...VENDEDORES].sort((a,b)=>b.abr-a.abr);
-  const maxAbr=sorted[0].abr;
+  const sorted=[...VENDEDORES].filter(v=>!v.newHire).sort((a,b)=>b.abr-a.abr);
+  const maxAbr=sorted.length>0?sorted[0].abr:1;
   let html=`<thead><tr>
     <th>Vendedor</th><th>Abril</th><th>Março</th><th>Var.</th><th>Evolução</th><th>Cli</th>
   </tr></thead><tbody>`;
@@ -1571,19 +2117,28 @@ let activeVendor='Guilherme';
 function initVendorPills(){
   const row=document.getElementById('vendor-pills');
   if(row.children.length) return;
-  VENDEDORES.forEach(v=>{
+  // Vendedor só vê a própria carteira
+  const vendorsToShow=window.CRM_VENDOR_NAME
+    ? VENDEDORES.filter(v=>v.name===window.CRM_VENDOR_NAME)
+    : VENDEDORES;
+  const defaultVendor=window.CRM_VENDOR_NAME||activeVendor;
+  vendorsToShow.forEach(v=>{
     const pill=document.createElement('div');
-    pill.className='pill'+(v.name===activeVendor?' active':'');
+    pill.className='pill'+(v.name===defaultVendor?' active':'');
     pill.textContent=v.name;
-    pill.onclick=()=>{
-      document.querySelectorAll('#vendor-pills .pill').forEach(p=>p.classList.remove('active'));
-      pill.classList.add('active');
-      activeVendor=v.name;
-      renderVendorDetail(v.name);
-    };
+    // Bloquear mudança de vendedor para perfil VENDEDOR
+    if(!window.CRM_VENDOR_NAME){
+      pill.onclick=()=>{
+        document.querySelectorAll('#vendor-pills .pill').forEach(p=>p.classList.remove('active'));
+        pill.classList.add('active');
+        activeVendor=v.name;
+        renderVendorDetail(v.name);
+      };
+    }
     row.appendChild(pill);
   });
-  renderVendorDetail(activeVendor);
+  activeVendor=defaultVendor;
+  renderVendorDetail(defaultVendor);
 }
 function renderVendorDetail(name){
   const v=VENDEDORES.find(x=>x.name===name);
@@ -1664,7 +2219,7 @@ const CREDS=[
   {user:'diogo',    pass:'123', role:'ANALISTA',   name:'Diogo',     av:'DI', fullAccess:true},
   {user:'carlos',   pass:'123', role:'GERENTE',    name:'Carlos',    av:'CA', fullAccess:true},
   {user:'lazaro',   pass:'123', role:'SUPERVISOR', name:'Lázaro',    av:'LZ', fullAccess:true},
-  // Vendedores
+  // Vendedores (9 ativos)
   {user:'guilherme',pass:'123', role:'VENDEDOR',   name:'Guilherme', av:'GU', vendId:'093', color:'#00D4AA'},
   {user:'relson',   pass:'123', role:'VENDEDOR',   name:'Relson',    av:'RE', vendId:'094', color:'#90CAF9'},
   {user:'israel',   pass:'123', role:'VENDEDOR',   name:'Israel',    av:'IS', vendId:'115', color:'#C77DFF'},
@@ -1673,12 +2228,14 @@ const CREDS=[
   {user:'keller',   pass:'123', role:'VENDEDOR',   name:'Keller',    av:'KE', vendId:'117', color:'#80DEEA'},
   {user:'althieres',pass:'123', role:'VENDEDOR',   name:'Althieres', av:'AL', vendId:'119', color:'#FFD93D'},
   {user:'jorge',    pass:'123', role:'VENDEDOR',   name:'Jorge',     av:'JO', vendId:'118', color:'rgba(255,255,255,.75)'},
-  // Técnicos
+  {user:'joao',     pass:'123', role:'VENDEDOR',   name:'João',     av:'JO2',vendId:'120', color:'#A8EDEA'},
+  // Técnicos (6 oficiais)
   {user:'matheus',  pass:'123', role:'TECNICO',    name:'Matheus',   av:'MA', color:'#00D4AA'},
   {user:'rogerio',  pass:'123', role:'TECNICO',    name:'Rogério',   av:'RO', color:'#FF6B6B'},
   {user:'marcelo',  pass:'123', role:'TECNICO',    name:'Marcelo',   av:'MC', color:'#C77DFF'},
   {user:'leonardo', pass:'123', role:'TECNICO',    name:'Leonardo',  av:'LE', color:'#FF9A56'},
-  {user:'juan',     pass:'123', role:'TECNICO',    name:'Juan',      av:'JU', color:'#FF9A56'},
+  {user:'juan',     pass:'123', role:'TECNICO',    name:'Juan',      av:'JU', color:'#80DEEA'},
+  {user:'caio',     pass:'123', role:'TECNICO',    name:'Caio',      av:'CA2',color:'#FFD93D', spec:'Panificação'},
 ];
 
 function togglePw(){
@@ -1741,22 +2298,69 @@ function applySession(user){
   if(avEl) avEl.textContent=user.av||user.name.slice(0,2).toUpperCase();
   const avLabel=document.querySelector('.topbar-avatar-label');
   if(avLabel) avLabel.textContent=user.name+' · '+user.role;
-  // Saudção Dashboard
+  // Greeting
   const greet=document.getElementById('dash-greeting');
   if(greet) greet.textContent='Bom dia, '+user.name+' '+(roleEmoji[user.role]||'☀️');
   // Sidebar footer
   const sf=document.querySelector('.sidebar-footer');
   if(sf) sf.innerHTML='<strong>'+user.name+' · '+user.role+'</strong><span>Abril 2026</span>';
-  // Técnico → redireciona para Agenda
-  if(user.role==='TECNICO'){
-    document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
-    document.getElementById('tab-agenda').classList.add('active');
-    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-    const agNav=document.querySelectorAll('.nav-item')[1];
-    if(agNav) agNav.classList.add('active');
-    document.querySelectorAll('.botnav-item').forEach(b=>b.classList.remove('active'));
-    const agBot=document.querySelectorAll('.botnav-item')[1];
-    if(agBot) agBot.classList.add('active');
+  // Print header meta
+  const phMeta=document.querySelector('#print-header .ph-meta');
+  if(phMeta) phMeta.innerHTML='<div>Emissão: '+new Date().toLocaleDateString('pt-BR')+'</div><div>'+user.name+' · '+user.role+'</div>';
+  // RBAC
+  if(user.role==='TECNICO')      applyTecnicoMode(user);
+  else if(user.role==='VENDEDOR') applyVendorMode(user);
+}
+
+function applyTecnicoMode(user){
+  // Redireciona para Agenda
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-agenda').classList.add('active');
+  // Sidebar: exibe apenas Agenda
+  const navItems=document.querySelectorAll('#sidebar .nav-item');
+  navItems.forEach((item,i)=>{ item.classList.remove('active'); if(i!==1) item.style.display='none'; });
+  if(navItems[1]) navItems[1].classList.add('active');
+  // Bottom nav: exibe apenas Agenda
+  const botItems=document.querySelectorAll('.botnav-item');
+  botItems.forEach((item,i)=>{ item.classList.remove('active'); if(i!==1) item.style.display='none'; });
+  if(botItems[1]) botItems[1].classList.add('active');
+  // Rodapé sidebar
+  const sf=document.querySelector('.sidebar-footer');
+  if(sf) sf.innerHTML='<strong>'+user.name+' · Técnico</strong><span>Apenas Agenda</span>';
+}
+
+function applyVendorMode(user){
+  window.CRM_VENDOR_ID  =user.vendId;
+  window.CRM_VENDOR_NAME=user.name;
+  // Oculta subtabs de visão geral e comparativo
+  const subtabs=document.querySelectorAll('#tab-analise .subtab');
+  subtabs.forEach((btn,i)=>{ if(i!==2) btn.style.display='none'; });
+  // Mostra banner de performance pessoal
+  const vendData=VENDEDORES.find(v=>v.cod===user.vendId);
+  const banner =document.getElementById('vendor-personal-banner');
+  if(banner && vendData){
+    const rank=[...VENDEDORES].filter(v=>!v.newHire).sort((a,b)=>b.abr-a.abr).findIndex(v=>v.name===vendData.name)+1;
+    const metaMap={'093':400000,'094':250000,'115':200000,'116':200000,'117':120000,'107':80000,'119':80000,'118':80000};
+    const meta   =metaMap[user.vendId]||200000;
+    const pct    =Math.min(Math.round((vendData.abr/meta)*100),100);
+    const metaColor=pct>=80?'var(--mint)':pct>=50?'var(--gold)':'var(--coral)';
+    banner.style.display='flex';
+    banner.innerHTML=`
+      <div style="flex:1;min-width:200px">
+        <div style="font-size:10px;color:rgba(255,255,255,.5);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">🎯 Sua Performance · Abril 2026</div>
+        <div style="display:flex;gap:18px;flex-wrap:wrap">
+          <div><div style="font-size:9px;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase">Faturamento</div><div style="font-size:20px;font-weight:900;color:${vendData.color}">${fBRL(vendData.abr)}</div></div>
+          <div><div style="font-size:9px;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase">Ranking</div><div style="font-size:20px;font-weight:900;color:#fff">#${rank}º</div></div>
+          <div><div style="font-size:9px;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase">Pedidos</div><div style="font-size:20px;font-weight:900;color:#fff">${vendData.ped}</div></div>
+          <div><div style="font-size:9px;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase">Clientes</div><div style="font-size:20px;font-weight:900;color:#fff">${vendData.cli}</div></div>
+        </div>
+      </div>
+      <div style="text-align:center;min-width:88px;padding-left:16px;border-left:1px solid rgba(255,255,255,.1)">
+        <div style="font-size:9px;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;margin-bottom:4px">Meta</div>
+        <div style="font-size:38px;font-weight:900;line-height:1;color:${metaColor}">${pct}%</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:4px">${fK(meta)}</div>
+      </div>
+    `;
   }
 }
 
@@ -1787,6 +2391,7 @@ document.addEventListener('keydown',e=>{
    INIT
 ───────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded',()=>{
+  renderKPIs();
   renderRanking();
   renderTop5();
   renderDonut('donut-svg','donut-legend');
