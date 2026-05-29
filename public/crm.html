@@ -756,7 +756,7 @@ body.mode-mobile .kpi-value{font-size:18px}
   </div>
   <div class="nav-item" onclick="showTab('registrar',this)">
     <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-    Registrar
+    Google Forms
   </div>
   <div class="nav-item" onclick="showTab('equipe',this)">
     <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4"/><circle cx="17" cy="17" r="4"/></svg>
@@ -785,7 +785,7 @@ body.mode-mobile .kpi-value{font-size:18px}
     </div>
     <div class="botnav-item" onclick="showTabMobile('registrar',this)">
       <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-      Registrar
+      Google Forms
     </div>
     <div class="botnav-item" onclick="showTabMobile('equipe',this)">
       <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4"/><circle cx="17" cy="17" r="4"/></svg>
@@ -1079,65 +1079,50 @@ body.mode-mobile .kpi-value{font-size:18px}
 <div class="tab-content" id="tab-registrar">
   <div class="section-header">
     <div>
-      <div class="section-title">Registrar</div>
-      <div class="section-sub">Formulários de campo</div>
+      <div class="section-title">Google Forms</div>
+      <div class="section-sub">Dados preenchidos pelos vendedores</div>
     </div>
+    <button onclick="loadFormsData()" style="background:var(--wine);color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:13px;cursor:pointer;font-family:inherit">↻ Atualizar</button>
   </div>
 
-  <div class="subtab-row">
-    <button class="subtab active" onclick="showRegSubtab('visita',this)">Visita</button>
-    <button class="subtab" onclick="showRegSubtab('prospeccao',this)">Prospecção</button>
-    <button class="subtab" onclick="showRegSubtab('apresentacao',this)">Apresentação</button>
-    <button class="subtab" onclick="showRegSubtab('cadastro',this)">Cadastro</button>
+  <!-- Nível 1: Vendedor -->
+  <div class="subtab-row" id="reg-seller-tabs">
+    <button class="subtab active" data-seller="GUILHERME" onclick="selectRegSeller(this)">Guilherme</button>
+    <button class="subtab" data-seller="RELSON" onclick="selectRegSeller(this)">Relson</button>
+    <button class="subtab" data-seller="EVERALDO" onclick="selectRegSeller(this)">Everaldo</button>
+    <button class="subtab" data-seller="ISRAEL" onclick="selectRegSeller(this)">Israel</button>
+    <button class="subtab" data-seller="NATALIA" onclick="selectRegSeller(this)">Natália</button>
+    <button class="subtab" data-seller="KELLER" onclick="selectRegSeller(this)">Keller</button>
+    <button class="subtab" data-seller="JORGE" onclick="selectRegSeller(this)">Jorge</button>
+    <button class="subtab" data-seller="ALTHIERES" onclick="selectRegSeller(this)">Althieres</button>
+    <button class="subtab" data-seller="JOAO" onclick="selectRegSeller(this)">João</button>
   </div>
 
-  <!-- Visita -->
-  <div id="reg-visita" style="max-width:600px">
-    <div class="card">
-      <div class="form-group"><label class="fl">Vendedor</label><select class="fi" id="v-vendedor"><option value="">Selecione...</option><option>Guilherme</option><option>Relson</option><option>Israel</option><option>Everaldo</option><option>Natália</option><option>Keller</option><option>Althieres</option><option>Jorge</option></select></div>
-      <div class="grid-2 gap-12"><div class="form-group"><label class="fl">Data</label><input class="fi" type="date" id="v-data"></div><div class="form-group"><label class="fl">Cód. Cliente</label><input class="fi" type="text" placeholder="Ex: 4190" id="v-cod"></div></div>
-      <div class="form-group"><label class="fl">Mês de Referência</label><input class="fi" type="text" placeholder="Ex: Abril 2026" id="v-mes"></div>
-      <div class="form-group"><label class="fl">Razão Social</label><input class="fi" type="text" placeholder="Nome do cliente" id="v-razao"></div>
-      <div class="form-group"><label class="fl">Dias da Semana</label><div class="chip-row"><span class="chip" onclick="toggleChip(this)">Seg</span><span class="chip" onclick="toggleChip(this)">Ter</span><span class="chip" onclick="toggleChip(this)">Qua</span><span class="chip" onclick="toggleChip(this)">Qui</span><span class="chip" onclick="toggleChip(this)">Sex</span><span class="chip" onclick="toggleChip(this)">Sáb</span></div></div>
-      <div class="form-group"><label class="fl">Situação do Pão</label><div class="chip-row"><span class="chip" onclick="toggleChip(this)">Ok</span><span class="chip" onclick="toggleChip(this)">Queijo mudou</span><span class="chip" onclick="toggleChip(this)">Produto aberto</span><span class="chip" onclick="toggleChip(this)">Bolsa problema</span><span class="chip" onclick="toggleChip(this)">Encaminhar portfólio</span></div></div>
-      <div class="form-group"><label class="fl">Observação</label><textarea class="fi" rows="3" placeholder="Detalhes da visita..." id="v-obs" style="resize:vertical"></textarea></div>
-      <button class="btn-primary" onclick="submitForm(this)">Registrar Visita</button>
-    </div>
+  <!-- Nível 2: Tipo de dado -->
+  <div class="subtab-row" style="margin-top:6px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.08)">
+    <button class="subtab active" style="font-size:12px">Prospecções</button>
   </div>
 
-  <!-- Prospecção -->
-  <div id="reg-prospeccao" style="display:none;max-width:600px">
-    <div class="card">
-      <div class="grid-2 gap-12"><div class="form-group"><label class="fl">Vendedor</label><select class="fi"><option value="">Selecione...</option><option>Guilherme</option><option>Relson</option><option>Israel</option><option>Everaldo</option><option>Natália</option><option>Keller</option><option>Althieres</option><option>Jorge</option><option>João</option></select></div><div class="form-group"><label class="fl">Mês</label><input class="fi" type="text" placeholder="Ex: Maio 2026"></div></div>
-      <div class="form-group"><label class="fl">Razão Social</label><input class="fi" type="text" placeholder="Nome do estabelecimento"></div>
-      <div class="form-group"><label class="fl">Endereço</label><input class="fi" type="text" placeholder="Endereço completo"></div>
-      <div class="grid-2 gap-12"><div class="form-group"><label class="fl">Responsável</label><input class="fi" type="text" placeholder="Nome do contato"></div><div class="form-group"><label class="fl">Telefone</label><input class="fi" type="tel" placeholder="(11) 99999-0000"></div></div>
-      <div class="form-group"><label class="fl">Empresa Atual</label><div class="chip-row"><span class="chip" onclick="toggleChip(this)">Prod. própria</span><span class="chip" onclick="toggleChip(this)">Pega pronto</span><span class="chip" onclick="toggleChip(this)">Distribuidor</span></div></div>
-      <div class="grid-2 gap-12"><div class="form-group"><label class="fl">Pães/dia</label><input class="fi" type="number" placeholder="Ex: 500"></div><div class="form-group"><label class="fl">Interesse</label><select class="fi"><option>Alto</option><option>Médio</option><option>Baixo</option><option>Neutro</option></select></div></div>
-      <div class="form-group"><label class="fl">Observação</label><textarea class="fi" rows="3" placeholder="Comentários da prospecção..." style="resize:vertical"></textarea></div>
-      <button class="btn-primary" onclick="submitForm(this)">Registrar Prospecção</button>
-    </div>
-  </div>
-
-  <!-- Apresentação -->
-  <div id="reg-apresentacao" style="display:none;max-width:600px">
-    <div class="card">
-      <div class="grid-2 gap-12"><div class="form-group"><label class="fl">Vendedor</label><select class="fi"><option value="">Selecione...</option><option>Felipe</option><option>Guilherme</option><option>Relson</option><option>Israel</option><option>Everaldo</option><option>Natália</option><option>Keller</option></select></div><div class="form-group"><label class="fl">Data</label><input class="fi" type="date"></div></div>
-      <div class="form-group"><label class="fl">Cliente</label><input class="fi" type="text" placeholder="Nome do cliente"></div>
-      <div class="form-group"><label class="fl">Empresa Atual</label><div class="chip-row"><span class="chip" onclick="toggleChip(this)">Ideal</span><span class="chip" onclick="toggleChip(this)">Prod. própria</span><span class="chip" onclick="toggleChip(this)">Pega pronto</span><span class="chip" onclick="toggleChip(this)">Outro</span></div></div>
-      <div class="form-group"><label class="fl">Volume/dia</label><input class="fi" type="number" placeholder="Pães por dia"></div>
-      <button class="btn-primary" onclick="submitForm(this)">Registrar Apresentação</button>
-    </div>
-  </div>
-
-  <!-- Cadastro -->
-  <div id="reg-cadastro" style="display:none;max-width:600px">
-    <div class="card">
-      <div class="grid-2 gap-12"><div class="form-group"><label class="fl">Vendedor</label><select class="fi"><option value="">Selecione...</option><option>Guilherme</option><option>Relson</option><option>Israel</option><option>Everaldo</option><option>Natália</option><option>Keller</option><option>Althieres</option><option>Jorge</option></select></div><div class="form-group"><label class="fl">Cód. Cliente</label><input class="fi" type="text" placeholder="Código ERP"></div></div>
-      <div class="grid-2 gap-12"><div class="form-group"><label class="fl">Mês</label><input class="fi" type="text" placeholder="Ex: Maio 2026"></div><div class="form-group"><label class="fl">Data</label><input class="fi" type="date"></div></div>
-      <div class="form-group"><label class="fl">Nome do Cliente</label><input class="fi" type="text" placeholder="Razão social"></div>
-      <button class="btn-primary" onclick="submitForm(this)">Registrar Cadastro</button>
-    </div>
+  <!-- Tabela -->
+  <div class="card" style="overflow-x:auto;margin-top:8px">
+    <div id="forms-status" style="color:#888;font-size:12px;margin-bottom:8px">Clique em Atualizar para carregar os dados</div>
+    <table class="anal-table" style="min-width:820px">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Razão Social</th>
+          <th>Endereço</th>
+          <th>Responsável</th>
+          <th>Contatos</th>
+          <th>Empresa Atual</th>
+          <th>Qtd Pães</th>
+          <th>Observação</th>
+        </tr>
+      </thead>
+      <tbody id="forms-tbody">
+        <tr><td colspan="8" style="text-align:center;color:#888;padding:24px">—</td></tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
@@ -1774,12 +1759,74 @@ function showSubtab(id,el){
   if(id==='porvendedor') initVendorPills();
   if(id==='carteira') initCarteiraSelect();
 }
-function showRegSubtab(id,el){
-  ['visita','prospeccao','apresentacao','cadastro'].forEach(s=>{
-    document.getElementById('reg-'+s).style.display=s===id?'block':'none';
-  });
-  document.querySelectorAll('#tab-registrar .subtab').forEach(b=>b.classList.remove('active'));
+let currentRegSeller='GUILHERME';
+let formsCache=[];
+
+function selectRegSeller(el){
+  currentRegSeller=el.dataset.seller;
+  document.querySelectorAll('#reg-seller-tabs .subtab').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
+  renderFormsTable();
+}
+
+const PROSPECCOES_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vRDMGydAtyaDITnAo3H7oqAh4HrB9rGYzsDS8sQUPeLvPPAH4IZri4UpK79d4lvYUGN2Q5n3P2qISVC/pub?gid=1717895650&single=true&output=csv';
+
+function parseCSV(text){
+  const rows=[];
+  for(const line of text.split('\n')){
+    if(!line.trim()) continue;
+    const cols=[];let cur='',inQ=false;
+    for(let i=0;i<line.length;i++){
+      const c=line[i];
+      if(c==='"'){inQ=!inQ;}
+      else if(c===','&&!inQ){cols.push(cur);cur='';}
+      else{cur+=c;}
+    }
+    cols.push(cur);
+    rows.push(cols);
+  }
+  return rows;
+}
+
+function renderFormsTable(){
+  const tbody=document.getElementById('forms-tbody');
+  const status=document.getElementById('forms-status');
+  if(!formsCache.length){
+    status.textContent='Clique em Atualizar para carregar os dados';
+    tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:#888;padding:24px">—</td></tr>';
+    return;
+  }
+  const rows=formsCache.filter(r=>r[0]&&r[0].trim().toUpperCase()===currentRegSeller);
+  if(!rows.length){
+    tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:#888;padding:24px">Nenhuma prospecção registrada para este vendedor</td></tr>';
+    status.textContent=`Total geral: ${formsCache.length} registros`;
+    return;
+  }
+  tbody.innerHTML=rows.map(r=>`<tr>
+    <td>${(r[1]||'').split(' ')[0]}</td>
+    <td>${r[3]||''}</td>
+    <td style="font-size:12px;max-width:160px">${r[4]||''}</td>
+    <td>${r[5]||''}</td>
+    <td>${r[6]||''}</td>
+    <td>${r[7]||''}</td>
+    <td>${r[8]||''}</td>
+    <td style="font-size:12px;max-width:200px">${r[10]||''}</td>
+  </tr>`).join('');
+  status.textContent=`${rows.length} prospecção(ões) — ${formsCache.length} no total`;
+}
+
+async function loadFormsData(){
+  const status=document.getElementById('forms-status');
+  status.textContent='Carregando...';
+  try{
+    const res=await fetch(PROSPECCOES_CSV);
+    const text=await res.text();
+    formsCache=parseCSV(text).filter(r=>r[0]&&r[0].trim());
+    renderFormsTable();
+  }catch(e){
+    status.textContent='Erro ao carregar. Verifique a conexão.';
+    document.getElementById('forms-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;color:#c00;padding:24px">Falha ao buscar dados</td></tr>';
+  }
 }
 
 /* ─────────────────────────────────────────
@@ -2332,6 +2379,13 @@ function applyTecnicoMode(user){
 function applyVendorMode(user){
   window.CRM_VENDOR_ID  =user.vendId;
   window.CRM_VENDOR_NAME=user.name;
+  // Forms tab: oculta abas de outros vendedores
+  const vendorKey=user.name.toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  currentRegSeller=vendorKey;
+  document.querySelectorAll('#reg-seller-tabs .subtab').forEach(btn=>{
+    if(btn.dataset.seller===vendorKey){btn.classList.add('active');}
+    else{btn.style.display='none';btn.classList.remove('active');}
+  });
   // Oculta subtabs de visão geral e comparativo
   const subtabs=document.querySelectorAll('#tab-analise .subtab');
   subtabs.forEach((btn,i)=>{ if(i!==2) btn.style.display='none'; });
